@@ -15,6 +15,7 @@ use App\Http\Controllers\Customer;
 |--------------------------------------------------------------------------
 */
 Route::get('/',              [LandingController::class, 'index'])->name('landing');
+Route::get('/produk',        [LandingController::class, 'catalog'])->name('produk.index');
 Route::get('/produk/{slug}', [LandingController::class, 'show'])->name('produk.show');
 
 // Auth
@@ -51,20 +52,28 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/penjual',          [Admin\SellerController::class, 'index'])->name('sellers');
         Route::post('/penjual',         [Admin\SellerController::class, 'store'])->name('sellers.store');
+        Route::get('/penjual/{user}',   [Admin\SellerController::class, 'show'])->name('sellers.show');
+        Route::put('/penjual/{user}',   [Admin\SellerController::class, 'update'])->name('sellers.update');
         Route::patch('/penjual/{user}/toggle', [Admin\SellerController::class, 'toggleStatus'])->name('sellers.toggle');
         Route::delete('/penjual/{user}',[Admin\SellerController::class, 'destroy'])->name('sellers.destroy');
 
         Route::get('/pelanggan',        [Admin\CustomerController::class, 'index'])->name('customers');
+        Route::get('/pelanggan/{user}', [Admin\CustomerController::class, 'show'])->name('customers.show');
         Route::delete('/pelanggan/{user}', [Admin\CustomerController::class, 'destroy'])->name('customers.destroy');
 
         Route::get('/penghantaran',     [Admin\ShippingController::class, 'index'])->name('shipping');
         Route::post('/penghantaran',    [Admin\ShippingController::class, 'store'])->name('shipping.store');
+        Route::get('/penghantaran/{shippingType}', [Admin\ShippingController::class, 'show'])->name('shipping.show');
+        Route::put('/penghantaran/{shippingType}', [Admin\ShippingController::class, 'update'])->name('shipping.update');
         Route::delete('/penghantaran/{shippingType}', [Admin\ShippingController::class, 'destroy'])->name('shipping.destroy');
 
         Route::get('/laporan',          [Admin\ReportController::class, 'index'])->name('reports');
+        Route::get('/laporan/eksport',  [Admin\ReportController::class, 'export'])->name('reports.export');
 
         Route::get('/kategori',         [Admin\CategoryController::class, 'index'])->name('categories');
         Route::post('/kategori',        [Admin\CategoryController::class, 'store'])->name('categories.store');
+        Route::get('/kategori/{category}', [Admin\CategoryController::class, 'show'])->name('categories.show');
+        Route::put('/kategori/{category}', [Admin\CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/kategori/{category}', [Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
     });
 
@@ -78,9 +87,12 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/produk',           [Seller\ProductController::class, 'index'])->name('products');
         Route::post('/produk',          [Seller\ProductController::class, 'store'])->name('products.store');
+        Route::get('/produk/{product}', [Seller\ProductController::class, 'show'])->name('products.show');
+        Route::put('/produk/{product}', [Seller\ProductController::class, 'update'])->name('products.update');
         Route::delete('/produk/{product}', [Seller\ProductController::class, 'destroy'])->name('products.destroy');
 
         Route::get('/transaksi',        [Seller\TransactionController::class, 'index'])->name('transactions');
+        Route::get('/transaksi/{order}', [Seller\TransactionController::class, 'show'])->name('transactions.show');
         Route::patch('/transaksi/{order}/status', [Seller\TransactionController::class, 'updateStatus'])->name('transactions.status');
     });
 
@@ -97,6 +109,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/alamat',           [Customer\AddressController::class, 'index'])->name('addresses');
         Route::post('/alamat',          [Customer\AddressController::class, 'store'])->name('addresses.store');
+        Route::get('/alamat/{address}', [Customer\AddressController::class, 'show'])->name('addresses.show');
+        Route::put('/alamat/{address}', [Customer\AddressController::class, 'update'])->name('addresses.update');
         Route::patch('/alamat/{address}/utama', [Customer\AddressController::class, 'setDefault'])->name('addresses.default');
         Route::delete('/alamat/{address}', [Customer\AddressController::class, 'destroy'])->name('addresses.destroy');
 

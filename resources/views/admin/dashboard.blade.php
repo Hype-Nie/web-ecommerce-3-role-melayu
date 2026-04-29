@@ -24,6 +24,16 @@
     @endforeach
 </div>
 
+{{-- Chart Section --}}
+<div class="bg-white rounded-2xl border border-gray-100 mb-8 animate-fade-in p-6">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-gray-900">Pendapatan 7 Hari Terakhir</h3>
+    </div>
+    <div class="relative h-72">
+        <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+
 {{-- Recent Orders --}}
 <div class="bg-white rounded-2xl border border-gray-100 animate-fade-in">
     <div class="p-6 border-b border-gray-100"><h3 class="font-bold text-gray-900">Pesanan Terbaru</h3></div>
@@ -46,4 +56,77 @@
         </table>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    
+    // Create gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(14, 165, 233, 0.2)'); // primary-500 with opacity
+    gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartLabels) !!},
+            datasets: [{
+                label: 'Pendapatan (RM)',
+                data: {!! json_encode($chartData) !!},
+                borderColor: '#0ea5e9', // primary-500
+                backgroundColor: gradient,
+                borderWidth: 2,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#0ea5e9',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    padding: 12,
+                    titleFont: { size: 13 },
+                    bodyFont: { size: 14, weight: 'bold' },
+                    callbacks: {
+                        label: function(context) {
+                            return 'RM ' + context.parsed.y.toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9', drawBorder: false },
+                    border: { display: false },
+                    ticks: {
+                        color: '#64748b',
+                        callback: function(value) { return 'RM ' + value; }
+                    }
+                },
+                x: {
+                    grid: { display: false, drawBorder: false },
+                    border: { display: false },
+                    ticks: { color: '#64748b' }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+        }
+    });
+});
+</script>
 @endsection

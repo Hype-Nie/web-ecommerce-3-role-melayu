@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Papan Pemuka') — Pelanggan KedaiKu</title>
+    <title>@yield('title', 'Papan Pemuka') — Pelanggan CampusBy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -16,7 +16,7 @@
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div>
-                    <h1 class="text-white font-bold text-lg">KedaiKu</h1>
+                    <h1 class="text-white font-bold text-lg">CampusBy</h1>
                     <p class="text-xs text-gray-500">Akaun Saya</p>
                 </div>
             </a>
@@ -48,12 +48,15 @@
         </nav>
         <div class="p-4 border-t border-white/5">
             <div class="flex items-center gap-3 px-3 py-2">
-                <div class="w-9 h-9 rounded-full bg-primary-400 flex items-center justify-center text-white font-bold text-sm">S</div>
+                <div class="w-9 h-9 rounded-full bg-primary-400 flex items-center justify-center text-white font-bold text-sm">{{ substr(auth()->user()->name,0,1) }}</div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-white text-sm font-medium truncate">Siti Nurhaliza</p>
-                    <p class="text-gray-500 text-xs truncate">siti@email.com</p>
+                    <p class="text-white text-sm font-medium truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-gray-500 text-xs truncate">{{ auth()->user()->email }}</p>
                 </div>
-                <a href="{{ route('landing') }}" class="text-gray-500 hover:text-white transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-gray-500 hover:text-white transition-colors" title="Log keluar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+                </form>
             </div>
         </div>
     </aside>
@@ -71,13 +74,25 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('cart') }}" class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors">
+                        @php $cartCount = \App\Models\CartItem::where('user_id', auth()->id())->sum('quantity'); @endphp
                         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
-                        <span class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">3</span>
+                        <span id="nav-cart-badge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center {{ $cartCount == 0 ? 'hidden' : '' }}">{{ $cartCount }}</span>
                     </a>
                 </div>
             </div>
         </header>
-        <div class="flex-1 p-6 lg:p-8">@yield('content')</div>
+        <div class="flex-1 p-6 lg:p-8">
+            @if($errors->any())
+            <div class="mb-6 p-4 rounded-xl bg-danger-50 border border-danger-100 text-danger-700 text-sm animate-fade-in">
+                <ul class="list-disc pl-5">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            @yield('content')
+        </div>
     </div>
 </div>
 @yield('scripts')

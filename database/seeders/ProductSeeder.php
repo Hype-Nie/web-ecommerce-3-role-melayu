@@ -11,8 +11,8 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $seller1 = User::where('email', 'aminah@kedaiku.my')->first()->id;
-        $seller2 = User::where('email', 'tech@kedaiku.my')->first()->id;
+        $seller1 = User::where('email', 'aminah@CampusBy.my')->first()->id;
+        $seller2 = User::where('email', 'tech@CampusBy.my')->first()->id;
 
         $products = [
             ['seller_id' => $seller2, 'category_id' => 1, 'name' => 'Jam Tangan Pintar Pro', 'description' => 'Jam tangan pintar dengan paparan AMOLED 1.5 inci, pemantauan kesihatan 24/7, kalis air IP68, dan hayat bateri sehingga 7 hari.', 'price' => 299.00, 'old_price' => 399.00, 'stock' => 24],

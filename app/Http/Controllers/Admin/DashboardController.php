@@ -16,9 +16,12 @@ class DashboardController extends Controller
         $totalProducts  = Product::count();
         $totalRevenue   = Order::where('payment_status', 'paid')->sum('total');
         $recentOrders   = Order::with('user')->latest()->take(5)->get();
+        $dates = collect(range(6, 0))->map(fn($days) => now()->subDays($days)->format('Y-m-d'));
+        $chartLabels = $dates->map(fn($date) => \Carbon\Carbon::parse($date)->format('d M'));
+        $chartData = $dates->map(fn($date) => Order::where('payment_status', 'paid')->whereDate('created_at', $date)->sum('total'));
 
         return view('admin.dashboard', compact(
-            'totalSellers', 'totalCustomers', 'totalProducts', 'totalRevenue', 'recentOrders'
+            'totalSellers', 'totalCustomers', 'totalProducts', 'totalRevenue', 'recentOrders', 'chartLabels', 'chartData'
         ));
     }
 }

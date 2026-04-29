@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Papan Pemuka') — Penjual KedaiKu</title>
+    <title>@yield('title', 'Papan Pemuka') — Penjual CampusBy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -16,7 +16,7 @@
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div>
-                    <h1 class="text-white font-bold text-lg">KedaiKu</h1>
+                    <h1 class="text-white font-bold text-lg">CampusBy</h1>
                     <p class="text-xs text-gray-500">Panel Penjual</p>
                 </div>
             </a>
@@ -39,12 +39,15 @@
         </nav>
         <div class="p-4 border-t border-white/5">
             <div class="flex items-center gap-3 px-3 py-2">
-                <div class="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold text-sm">P</div>
+                <div class="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold text-sm">{{ substr(auth()->user()->name,0,1) }}</div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-white text-sm font-medium truncate">Kedai Aminah</p>
-                    <p class="text-gray-500 text-xs truncate">aminah@kedaiku.my</p>
+                    <p class="text-white text-sm font-medium truncate">{{ auth()->user()->shop_name ?? auth()->user()->name }}</p>
+                    <p class="text-gray-500 text-xs truncate">{{ auth()->user()->email }}</p>
                 </div>
-                <a href="{{ route('landing') }}" class="text-gray-500 hover:text-white transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-gray-500 hover:text-white transition-colors" title="Log keluar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+                </form>
             </div>
         </div>
     </aside>
@@ -61,16 +64,67 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                        <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-danger-500 rounded-full border-2 border-white"></span>
-                    </button>
+                    {{-- Notifications --}}
+                    @php
+                        $newOrdersCount = \App\Models\OrderItem::whereIn('product_id', auth()->user()->products()->pluck('id'))->whereHas('order', fn($q) => $q->where('status', 'pending'))->count();
+                        $lowStockCount = auth()->user()->products()->where('stock', '<=', 5)->count();
+                        $totalNotifications = $newOrdersCount + $lowStockCount;
+                    @endphp
+                    <div class="relative" id="notification-dropdown-container">
+                        <button onclick="document.getElementById('notification-menu').classList.toggle('hidden')" class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors">
+                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                            @if($totalNotifications > 0)
+                            <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-danger-500 rounded-full border-2 border-white"></span>
+                            @endif
+                        </button>
+                        <div id="notification-menu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                            <div class="p-4 border-b border-gray-100 font-bold text-gray-900">Notifikasi</div>
+                            <div class="max-h-64 overflow-y-auto">
+                                @if($totalNotifications === 0)
+                                    <p class="p-4 text-sm text-gray-500 text-center">Tiada notifikasi baru</p>
+                                @else
+                                    @if($newOrdersCount > 0)
+                                    <a href="{{ route('seller.transactions') }}" class="block p-4 hover:bg-gray-50 border-b border-gray-50">
+                                        <p class="text-sm font-semibold text-gray-900">Pesanan Baru</p>
+                                        <p class="text-xs text-gray-500 mt-1">Terdapat {{ $newOrdersCount }} pesanan baru menunggu untuk diproses.</p>
+                                    </a>
+                                    @endif
+                                    @if($lowStockCount > 0)
+                                    <a href="{{ route('seller.products') }}" class="block p-4 hover:bg-gray-50">
+                                        <p class="text-sm font-semibold text-gray-900">Stok Rendah</p>
+                                        <p class="text-xs text-gray-500 mt-1">Terdapat {{ $lowStockCount }} produk yang kehabisan atau hampir kehabisan stok.</p>
+                                    </a>
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
-        <div class="flex-1 p-6 lg:p-8">@yield('content')</div>
+        <div class="flex-1 p-6 lg:p-8">
+            @if($errors->any())
+            <div class="mb-6 p-4 rounded-xl bg-danger-50 border border-danger-100 text-danger-700 text-sm animate-fade-in">
+                <ul class="list-disc pl-5">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            @yield('content')
+        </div>
     </div>
 </div>
 @yield('scripts')
+<script>
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('notification-dropdown-container');
+        const menu = document.getElementById('notification-menu');
+        if (container && menu && !container.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+</script>
 </body>
 </html>
