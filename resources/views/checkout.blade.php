@@ -3,7 +3,13 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-2xl font-bold text-gray-900 mb-8 animate-fade-in">Checkout</h1>
+    <div class="flex items-center justify-between mb-8 animate-fade-in">
+        <h1 class="text-2xl font-bold text-gray-900">Checkout</h1>
+        <a href="{{ route('cart') }}" class="inline-flex items-center gap-2 text-sm text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Kembali ke Troli
+        </a>
+    </div>
 
     <form action="{{ route('checkout.place') }}" method="POST">
         @csrf
@@ -77,6 +83,7 @@
                     <div class="border-t border-gray-100 pt-2 flex justify-between"><span class="font-bold text-gray-900">Anggaran Jumlah</span><span class="text-xl font-bold text-primary-600">RM {{ number_format($subtotal, 2) }}+</span></div>
                 </div>
                 <button type="submit" class="btn-primary w-full text-center">Buat Pesanan</button>
+                <a href="{{ route('cart') }}" class="btn-ghost w-full text-center block mt-2 text-sm">Batal</a>
             </div>
         </div>
     </form>

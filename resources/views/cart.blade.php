@@ -3,7 +3,13 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-2xl font-bold text-gray-900 mb-8 animate-fade-in">Troli Saya</h1>
+    <div class="flex items-center justify-between mb-8 animate-fade-in">
+        <h1 class="text-2xl font-bold text-gray-900">Troli Saya</h1>
+        <a href="{{ route('produk.index') }}" class="inline-flex items-center gap-2 text-sm text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Teruskan Membeli-belah
+        </a>
+    </div>
 
     @if(session('success'))
     <div class="mb-6 p-4 rounded-xl bg-primary-50 border border-primary-100 text-primary-700 text-sm">{{ session('success') }}</div>
@@ -13,15 +19,19 @@
     <div class="bg-white rounded-2xl border border-gray-100 p-12 text-center animate-fade-in">
         <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
         <p class="text-gray-500 mb-4">Troli anda kosong</p>
-        <a href="{{ route('landing') }}" class="btn-primary text-sm !px-6 !py-2.5">Mula Membeli-belah</a>
+        <a href="{{ route('produk.index') }}" class="btn-primary text-sm !px-6 !py-2.5">Mula Membeli-belah</a>
     </div>
     @else
     <div class="grid lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-4 animate-fade-in">
             @foreach($cartItems as $item)
             <div class="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4">
-                <div class="w-20 h-20 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <div class="w-20 h-20 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 overflow-hidden">
+                    @if($item->product->images->isNotEmpty())
+                    <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                    @else
                     <svg class="w-10 h-10 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    @endif
                 </div>
                 <div class="flex-1 min-w-0">
                     <h3 class="font-semibold text-gray-900 truncate">{{ $item->product->name }}</h3>

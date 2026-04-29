@@ -10,7 +10,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = auth()->user()->cartItems()->with('product.seller')->get();
+        $cartItems = auth()->user()->cartItems()->with('product.seller', 'product.images')->get();
         $subtotal  = $cartItems->sum(fn ($item) => $item->product->price * $item->quantity);
 
         return view('cart', compact('cartItems', 'subtotal'));
@@ -36,6 +36,16 @@ class CartController extends Controller
                 'user_id'    => auth()->id(),
                 'product_id' => $product->id,
                 'quantity'   => $request->quantity ?? 1,
+            ]);
+        }
+
+        // Return JSON for AJAX requests
+        if ($request->ajax() || $request->wantsJson()) {
+            $cartCount = auth()->user()->cartItems()->count();
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Produk berjaya ditambah ke troli.',
+                'cartCount' => $cartCount,
             ]);
         }
 

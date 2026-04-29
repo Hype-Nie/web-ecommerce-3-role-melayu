@@ -57,7 +57,7 @@
         $catIcons = ['M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z','M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z','M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4','M13 10V3L4 14h7v7l9-11h-7z','M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z','M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z','M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'];
         @endphp
         @foreach($categories as $i => $cat)
-        <a href="#" class="group reveal">
+        <a href="{{ route('produk.index', ['category' => $cat->id]) }}" class="group reveal">
             <div class="bg-white rounded-2xl p-6 text-center card-hover border border-gray-100">
                 <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br {{ $catColors[$i % count($catColors)] }} flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $catIcons[$i % count($catIcons)] }}"/></svg>
@@ -78,7 +78,7 @@
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Produk Popular</h2>
                 <p class="text-gray-500">Produk terlaris pilihan pelanggan kami</p>
             </div>
-            <a href="#" class="hidden sm:inline-flex items-center gap-1 text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+            <a href="{{ route('produk.index') }}" class="hidden sm:inline-flex items-center gap-1 text-primary-600 font-semibold hover:text-primary-700 transition-colors">
                 Lihat Semua <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -87,8 +87,12 @@
             @foreach($products as $i => $p)
             <a href="{{ route('produk.show', $p->slug) }}" class="group reveal">
                 <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden card-hover">
-                    <div class="relative h-48 bg-gradient-to-br {{ $bgColors[$i % count($bgColors)] }} flex items-center justify-center">
+                    <div class="relative h-48 bg-gradient-to-br {{ $bgColors[$i % count($bgColors)] }} flex items-center justify-center overflow-hidden">
+                        @if($p->images->isNotEmpty())
+                        <img src="{{ asset('storage/' . $p->images->first()->image_path) }}" alt="{{ $p->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        @else
                         <svg class="w-16 h-16 text-gray-300 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        @endif
                         @if($p->discountPercent())
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-primary-600 text-white text-xs font-semibold">-{{ $p->discountPercent() }}%</span>
                         @endif

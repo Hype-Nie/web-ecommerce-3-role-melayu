@@ -1,6 +1,6 @@
 @extends('layouts.customer')
 @section('title', 'Papan Pemuka')
-@section('page_title', 'Selamat Datang, {{ auth()->user()->name }}!')
+@section('page_title', 'Selamat Datang, ' . auth()->user()->name . '!')
 @section('page_subtitle', 'Berikut adalah ringkasan akaun anda')
 
 @section('content')

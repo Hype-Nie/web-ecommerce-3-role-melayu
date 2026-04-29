@@ -48,12 +48,15 @@
         </nav>
         <div class="p-4 border-t border-white/5">
             <div class="flex items-center gap-3 px-3 py-2">
-                <div class="w-9 h-9 rounded-full bg-primary-400 flex items-center justify-center text-white font-bold text-sm">S</div>
+                <div class="w-9 h-9 rounded-full bg-primary-400 flex items-center justify-center text-white font-bold text-sm">{{ substr(auth()->user()->name,0,1) }}</div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-white text-sm font-medium truncate">Siti Nurhaliza</p>
-                    <p class="text-gray-500 text-xs truncate">siti@email.com</p>
+                    <p class="text-white text-sm font-medium truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-gray-500 text-xs truncate">{{ auth()->user()->email }}</p>
                 </div>
-                <a href="{{ route('landing') }}" class="text-gray-500 hover:text-white transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-gray-500 hover:text-white transition-colors" title="Log keluar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+                </form>
             </div>
         </div>
     </aside>
