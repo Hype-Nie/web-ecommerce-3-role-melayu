@@ -7,7 +7,7 @@
                 <div class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
-                <span class="text-xl font-bold text-gray-900">Kedai<span class="text-primary-600">Ku</span></span>
+                <span class="text-xl font-bold text-gray-900">Campus<span class="text-primary-600">By</span></span>
             </a>
 
             {{-- Search Bar (Desktop) --}}

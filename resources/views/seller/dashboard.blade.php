@@ -19,6 +19,16 @@
     </div>
     @endforeach
 </div>
+{{-- Chart Section --}}
+<div class="bg-white rounded-2xl border border-gray-100 mb-8 animate-fade-in p-6">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-gray-900">Jualan 7 Hari Terakhir</h3>
+    </div>
+    <div class="relative h-72">
+        <canvas id="salesChart"></canvas>
+    </div>
+</div>
+
 <div class="bg-white rounded-2xl border border-gray-100 animate-fade-in">
     <div class="p-6 border-b border-gray-100"><h3 class="font-bold text-gray-900">Pesanan Terbaru</h3></div>
     <div class="overflow-x-auto">
@@ -26,7 +36,7 @@
             <thead><tr><th>ID</th><th>Pelanggan</th><th>Jumlah</th><th>Status</th></tr></thead>
             <tbody>
                 @forelse($recentOrders as $o)
-                <tr>
+                <tr class="cursor-pointer hover:bg-gray-50" onclick="window.location='{{ route('seller.transactions') }}'">
                     <td class="font-semibold">#{{ $o->order_number }}</td>
                     <td>{{ $o->user->name }}</td>
                     <td class="font-semibold">RM {{ number_format($o->total, 2) }}</td>
@@ -39,4 +49,77 @@
         </table>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    
+    // Create gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(139, 92, 246, 0.2)'); // violet-500
+    gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartLabels) !!},
+            datasets: [{
+                label: 'Jualan (RM)',
+                data: {!! json_encode($chartData) !!},
+                borderColor: '#8b5cf6', // violet-500
+                backgroundColor: gradient,
+                borderWidth: 2,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#8b5cf6',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    padding: 12,
+                    titleFont: { size: 13 },
+                    bodyFont: { size: 14, weight: 'bold' },
+                    callbacks: {
+                        label: function(context) {
+                            return 'RM ' + context.parsed.y.toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9', drawBorder: false },
+                    border: { display: false },
+                    ticks: {
+                        color: '#64748b',
+                        callback: function(value) { return 'RM ' + value; }
+                    }
+                },
+                x: {
+                    grid: { display: false, drawBorder: false },
+                    border: { display: false },
+                    ticks: { color: '#64748b' }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+        }
+    });
+});
+</script>
 @endsection

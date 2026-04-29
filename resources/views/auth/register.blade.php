@@ -44,9 +44,40 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mel</label>
                     <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" class="input-styled" required>
                 </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">No. Telefon</label>
+                        <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="cth: 012-3456789" class="input-styled" required>
+                    </div>
+                </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">No. Telefon</label>
-                    <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="cth: 012-3456789" class="input-styled" required>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Daftar Sebagai</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="role" value="customer" class="peer sr-only" {{ old('role', 'customer') == 'customer' ? 'checked' : '' }}>
+                            <div class="rounded-xl border-2 border-gray-100 p-4 hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 peer-checked:bg-primary-500 peer-checked:text-white transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    </div>
+                                    <p class="font-bold text-gray-900">Pelanggan</p>
+                                </div>
+                                <p class="text-xs text-gray-500 ml-11">Beli-belah dengan mudah.</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="role" value="seller" class="peer sr-only" {{ old('role') == 'seller' ? 'checked' : '' }}>
+                            <div class="rounded-xl border-2 border-gray-100 p-4 hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 peer-checked:bg-primary-500 peer-checked:text-white transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    </div>
+                                    <p class="font-bold text-gray-900">Penjual</p>
+                                </div>
+                                <p class="text-xs text-gray-500 ml-11">Mula berniaga hari ini.</p>
+                            </div>
+                        </label>
+                    </div>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-4">
                     <div>

@@ -32,7 +32,8 @@ class AuthController extends Controller
             $user = Auth::user();
             if (!$user->is_active) {
                 Auth::logout();
-                return back()->withErrors(['email' => 'Akaun anda telah dinyahaktifkan.']);
+                $msg = $user->role === 'seller' ? 'Akaun penjual anda sedang menunggu pengesahan admin.' : 'Akaun anda telah dinyahaktifkan.';
+                return back()->withErrors(['email' => $msg]);
             }
 
             return $this->redirectByRole($user);
@@ -52,6 +53,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users',
             'phone'    => 'required|string|max:20',
+            'role'     => 'required|in:customer,seller',
             'password' => 'required|string|min:8|confirmed',
         ], [
             'name.required'      => 'Sila masukkan nama.',
@@ -68,8 +70,13 @@ class AuthController extends Controller
             'email'    => $request->email,
             'phone'    => $request->phone,
             'password' => $request->password, // hashed via cast
-            'role'     => 'customer',
+            'role'     => $request->role,
+            'is_active'=> $request->role === 'seller' ? false : true,
         ]);
+
+        if ($user->role === 'seller') {
+            return redirect()->route('login')->with('success', 'Pendaftaran berjaya. Sila tunggu pengesahan admin untuk akaun penjual anda.');
+        }
 
         Auth::login($user);
         return redirect()->route('customer.dashboard');

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Laman Utama')
-@section('meta_description', 'KedaiKu — Platform e-dagang terbaik di Malaysia. Beli-belah dalam talian dengan mudah dan selamat.')
+@section('meta_description', 'CampusBy — Platform e-dagang terbaik di Malaysia. Beli-belah dalam talian dengan mudah dan selamat.')
 
 @section('content')
 {{-- HERO --}}
@@ -59,9 +59,15 @@
         @foreach($categories as $i => $cat)
         <a href="{{ route('produk.index', ['category' => $cat->id]) }}" class="group reveal">
             <div class="bg-white rounded-2xl p-6 text-center card-hover border border-gray-100">
+                @if($cat->image)
+                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl overflow-hidden group-hover:scale-110 transition-transform duration-300">
+                    <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" class="w-full h-full object-cover">
+                </div>
+                @else
                 <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br {{ $catColors[$i % count($catColors)] }} flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $catIcons[$i % count($catIcons)] }}"/></svg>
                 </div>
+                @endif
                 <h3 class="font-semibold text-gray-800 text-sm">{{ $cat->name }}</h3>
                 <p class="text-xs text-gray-400 mt-1">{{ $cat->products_count }} produk</p>
             </div>
@@ -128,40 +134,6 @@
             <h3 class="text-2xl lg:text-3xl font-bold mb-3">Beli Lebih RM150</h3>
             <p class="text-gray-400 mb-6">Nikmati penghantaran percuma ke seluruh Malaysia.</p>
             <a href="#" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all duration-300">Ketahui Lagi</a>
-        </div>
-    </div>
-</section>
-
-{{-- TESTIMONI --}}
-<section class="py-16 lg:py-20 bg-primary-50/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 reveal">
-            <h2 class="text-3xl font-bold text-gray-900 mb-3">Apa Kata Pelanggan Kami</h2>
-            <p class="text-gray-500 max-w-md mx-auto">Ribuan pelanggan berpuas hati dengan perkhidmatan kami</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6">
-            @php
-            $testimonials = [
-                ['name'=>'Ahmad bin Hassan','text'=>'Pengalaman membeli-belah yang sangat memuaskan! Penghantaran pantas dan produk berkualiti.','role'=>'Pelanggan Setia'],
-                ['name'=>'Fatimah binti Ali','text'=>'Harga berpatutan dan pilihan produk yang sangat banyak. Saya sangat suka platform ini!','role'=>'Pelanggan Baru'],
-                ['name'=>'Mohd Rizal','text'=>'Sebagai penjual, KedaiKu membantu saya meluaskan perniagaan. Sistem yang mudah dan efisien.','role'=>'Penjual Berjaya'],
-            ];
-            @endphp
-            @foreach($testimonials as $t)
-            <div class="bg-white rounded-2xl p-6 border border-gray-100 card-hover reveal">
-                <div class="flex gap-1 mb-4">
-                    @for($i=0;$i<5;$i++)<svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>@endfor
-                </div>
-                <p class="text-gray-600 text-sm leading-relaxed mb-4">"{{ $t['text'] }}"</p>
-                <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <div class="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-sm">{{ substr($t['name'],0,1) }}</div>
-                    <div>
-                        <p class="font-semibold text-gray-800 text-sm">{{ $t['name'] }}</p>
-                        <p class="text-xs text-gray-400">{{ $t['role'] }}</p>
-                    </div>
-                </div>
-            </div>
-            @endforeach
         </div>
     </div>
 </section>

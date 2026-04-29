@@ -63,7 +63,7 @@
     {{-- Bottom Bar --}}
     <div class="border-t border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p class="text-sm text-gray-500">&copy; {{ date('Y') }} KedaiKu. Hak cipta terpelihara.</p>
+            <p class="text-sm text-gray-500">&copy; {{ date('Y') }} CampusBy. Hak cipta terpelihara.</p>
             <div class="flex items-center gap-6 text-sm text-gray-500">
                 <span>Pembayaran Selamat</span>
                 <div class="flex items-center gap-2">

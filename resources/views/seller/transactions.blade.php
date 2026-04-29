@@ -22,17 +22,15 @@
                     <td onclick="event.stopPropagation()">
                         <div class="flex items-center gap-2">
                             <button onclick="showTransaction({{ $o->id }})" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-primary-600" title="Lihat"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
-                            @if($o->status === 'pending')
-                            <form action="{{ route('seller.transactions.status', $o) }}" method="POST">@csrf @method('PATCH')
-                                <input type="hidden" name="status" value="processing">
-                                <button class="px-3 py-1.5 rounded-lg bg-primary-50 text-primary-700 text-xs font-semibold hover:bg-primary-100" title="Proses">Proses</button>
+                            <form action="{{ route('seller.transactions.status', $o) }}" method="POST" onclick="event.stopPropagation()">@csrf @method('PATCH')
+                                <select name="status" onchange="if(confirm('Pasti mahu menukar status?')) this.form.submit(); else this.value='{{ $o->status }}';" class="px-2 py-1 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 cursor-pointer">
+                                    <option value="pending" {{ $o->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                    <option value="processing" {{ $o->status == 'processing' ? 'selected' : '' }}>Diproses</option>
+                                    <option value="shipped" {{ $o->status == 'shipped' ? 'selected' : '' }}>Dihantar</option>
+                                    <option value="completed" {{ $o->status == 'completed' ? 'selected' : '' }}>Tiba (Selesai)</option>
+                                    <option value="cancelled" {{ $o->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                                </select>
                             </form>
-                            @elseif($o->status === 'processing')
-                            <form action="{{ route('seller.transactions.status', $o) }}" method="POST">@csrf @method('PATCH')
-                                <input type="hidden" name="status" value="shipped">
-                                <button class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100" title="Hantar">Hantar</button>
-                            </form>
-                            @endif
                         </div>
                     </td>
                 </tr>

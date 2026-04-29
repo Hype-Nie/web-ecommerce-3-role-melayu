@@ -29,9 +29,14 @@ class DashboardController extends Controller
                         ->latest()
                         ->take(5)
                         ->get();
+        $dates = collect(range(6, 0))->map(fn($days) => now()->subDays($days)->format('Y-m-d'));
+        $chartLabels = $dates->map(fn($date) => \Carbon\Carbon::parse($date)->format('d M'));
+        $chartData = $dates->map(fn($date) => OrderItem::whereIn('product_id', $productIds)
+                            ->whereHas('order', fn ($q) => $q->where('payment_status', 'paid')->whereDate('created_at', $date))
+                            ->sum('subtotal'));
 
         return view('seller.dashboard', compact(
-            'totalProducts', 'newOrders', 'monthlyRevenue', 'lowStock', 'recentOrders'
+            'totalProducts', 'newOrders', 'monthlyRevenue', 'lowStock', 'recentOrders', 'chartLabels', 'chartData'
         ));
     }
 }

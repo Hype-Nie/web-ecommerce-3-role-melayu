@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         // Admin
         User::create([
             'name' => 'Admin Utama',
-            'email' => 'admin@kedaiku.my',
+            'email' => 'admin@CampusBy.my',
             'password' => Hash::make('password'),
             'role' => 'admin',
             'phone' => '03-12345678',
@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         // Sellers
         User::create([
             'name' => 'Aminah binti Yusof',
-            'email' => 'aminah@kedaiku.my',
+            'email' => 'aminah@CampusBy.my',
             'password' => Hash::make('password'),
             'role' => 'seller',
             'phone' => '012-3456789',
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Razak bin Omar',
-            'email' => 'tech@kedaiku.my',
+            'email' => 'tech@CampusBy.my',
             'password' => Hash::make('password'),
             'role' => 'seller',
             'phone' => '013-9876543',
