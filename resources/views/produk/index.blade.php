@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Semua Produk')
-@section('meta_description', 'Lihat semua produk di CampusBy. Cari dan tapis mengikut kategori.')
+@section('meta_description', 'Lihat semua produk di CampusBuy. Cari dan tapis mengikut kategori.')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

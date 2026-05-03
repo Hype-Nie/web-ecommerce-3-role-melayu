@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\CartController;
+
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Seller;
@@ -32,11 +32,7 @@ Route::post('/log-keluar',[AuthController::class, 'logout'])->name('logout');
 */
 Route::middleware('auth')->group(function () {
 
-    // Cart
-    Route::get('/troli',                    [CartController::class, 'index'])->name('cart');
-    Route::post('/troli',                   [CartController::class, 'add'])->name('cart.add');
-    Route::put('/troli/{cartItem}',         [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/troli/{cartItem}',      [CartController::class, 'remove'])->name('cart.remove');
+    // Cart routes removed
 
     // Checkout
     Route::get('/pembayaran',              [CheckoutController::class, 'index'])->name('checkout');
@@ -49,6 +45,7 @@ Route::middleware('auth')->group(function () {
     */
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         Route::get('/papan-pemuka',     [Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/pesanan/{order}',  [Admin\DashboardController::class, 'showOrder'])->name('orders.show');
 
         Route::get('/penjual',          [Admin\SellerController::class, 'index'])->name('sellers');
         Route::post('/penjual',         [Admin\SellerController::class, 'store'])->name('sellers.store');
@@ -60,12 +57,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/pelanggan',        [Admin\CustomerController::class, 'index'])->name('customers');
         Route::get('/pelanggan/{user}', [Admin\CustomerController::class, 'show'])->name('customers.show');
         Route::delete('/pelanggan/{user}', [Admin\CustomerController::class, 'destroy'])->name('customers.destroy');
-
-        Route::get('/penghantaran',     [Admin\ShippingController::class, 'index'])->name('shipping');
-        Route::post('/penghantaran',    [Admin\ShippingController::class, 'store'])->name('shipping.store');
-        Route::get('/penghantaran/{shippingType}', [Admin\ShippingController::class, 'show'])->name('shipping.show');
-        Route::put('/penghantaran/{shippingType}', [Admin\ShippingController::class, 'update'])->name('shipping.update');
-        Route::delete('/penghantaran/{shippingType}', [Admin\ShippingController::class, 'destroy'])->name('shipping.destroy');
 
         Route::get('/laporan',          [Admin\ReportController::class, 'index'])->name('reports');
         Route::get('/laporan/eksport',  [Admin\ReportController::class, 'export'])->name('reports.export');

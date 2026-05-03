@@ -23,8 +23,8 @@
                         <div class="flex items-center gap-2">
                             <button onclick="showTransaction({{ $o->id }})" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-primary-600" title="Lihat"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
                             <form action="{{ route('seller.transactions.status', $o) }}" method="POST" onclick="event.stopPropagation()">@csrf @method('PATCH')
-                                <select name="status" onchange="if(confirm('Pasti mahu menukar status?')) this.form.submit(); else this.value='{{ $o->status }}';" class="px-2 py-1 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 cursor-pointer">
-                                    <option value="pending" {{ $o->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                <select name="status" onchange="if(confirm('Pasti mahu menukar status ke: ' + this.options[this.selectedIndex].text + '?')) this.form.submit(); else this.value='{{ $o->status }}';" class="px-2 py-1 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 cursor-pointer">
+                                    <option value="sold" {{ $o->status == 'sold' ? 'selected' : '' }}>Terjual</option>
                                     <option value="processing" {{ $o->status == 'processing' ? 'selected' : '' }}>Diproses</option>
                                     <option value="shipped" {{ $o->status == 'shipped' ? 'selected' : '' }}>Dihantar</option>
                                     <option value="completed" {{ $o->status == 'completed' ? 'selected' : '' }}>Tiba (Selesai)</option>
@@ -65,10 +65,11 @@ function showTransaction(id) {
         .then(r => r.json())
         .then(d => {
             let itemsHtml = d.items.map(i => `<div class="flex justify-between py-2"><div><p class="font-medium text-sm">${i.product_name}</p><p class="text-xs text-gray-400">x${i.quantity}</p></div><span class="font-semibold text-sm">RM ${i.subtotal}</span></div>`).join('');
+            let statusMap = {'completed':'gray','cancelled':'danger','shipped':'success','processing':'warning','sold':'success','pending':'info'};
             body.innerHTML = `
                 <div class="flex items-center justify-between mb-4">
                     <h4 class="text-lg font-bold text-gray-900">#${d.order_number}</h4>
-                    <span class="badge badge-${d.status === 'completed' ? 'gray' : d.status === 'cancelled' ? 'danger' : d.status === 'shipped' ? 'success' : d.status === 'processing' ? 'warning' : 'info'}">${d.status_label}</span>
+                    <span class="badge badge-${statusMap[d.status] || 'gray'}">${d.status_label}</span>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-4 mb-4">
                     <div class="bg-gray-50 rounded-xl p-4">
@@ -76,6 +77,7 @@ function showTransaction(id) {
                         <p class="font-medium text-sm">${d.customer.name}</p>
                         <p class="text-sm text-gray-500">${d.customer.email}</p>
                         <p class="text-sm text-gray-500">${d.customer.phone || '-'}</p>
+                        <p class="text-sm text-gray-500 mt-1">Campus ID: ${d.customer.campus_id || '-'}</p>
                     </div>
                     <div class="bg-gray-50 rounded-xl p-4">
                         <p class="text-xs text-gray-400 font-semibold uppercase mb-2">Alamat</p>
@@ -88,12 +90,11 @@ function showTransaction(id) {
                 </div>
                 <div class="grid grid-cols-3 gap-4 text-sm">
                     <div><p class="text-gray-400 text-xs">Subtotal</p><p class="font-semibold">RM ${d.subtotal}</p></div>
-                    <div><p class="text-gray-400 text-xs">Penghantaran</p><p class="font-semibold">RM ${d.shipping_cost}</p></div>
+                    <div><p class="text-gray-400 text-xs">Pembayaran</p><p class="font-medium">${d.payment_method}</p></div>
                     <div><p class="text-gray-400 text-xs">Jumlah</p><p class="font-bold text-primary-600">RM ${d.total}</p></div>
                 </div>
-                <div class="grid grid-cols-3 gap-4 text-sm mt-3">
-                    <div><p class="text-gray-400 text-xs">Pembayaran</p><p class="font-medium">${d.payment_method}</p></div>
-                    <div><p class="text-gray-400 text-xs">Kurier</p><p class="font-medium">${d.shipping ? d.shipping.name : '-'}</p></div>
+                <div class="grid grid-cols-2 gap-4 text-sm mt-3">
+                    <div><p class="text-gray-400 text-xs">WhatsApp</p><p class="font-medium">${d.whatsapp_sent ? '✅ Terhantar' : '❌ Belum'}</p></div>
                     <div><p class="text-gray-400 text-xs">Tarikh</p><p class="font-medium">${d.created_at}</p></div>
                 </div>
             `;

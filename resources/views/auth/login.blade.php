@@ -13,15 +13,22 @@
                     <svg class="w-12 h-12 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
                 <h2 class="text-2xl font-bold text-white mb-3">Selamat Kembali!</h2>
-                <p class="text-primary-200/70 text-sm max-w-xs mx-auto">Log masuk ke akaun anda untuk meneruskan pengalaman membeli-belah yang terbaik.</p>
+                <p class="text-primary-200/70 text-sm max-w-xs mx-auto">Log masuk ke akaun CampusBuy anda untuk meneruskan pengalaman jual-beli di kampus.</p>
             </div>
         </div>
 
         {{-- Right Form --}}
         <div class="p-8 lg:p-12">
-            <div class="mb-8">
+            <div class="mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 mb-2">Log Masuk</h1>
-                <p class="text-gray-500 text-sm">Masukkan e-mel dan kata laluan anda untuk meneruskan.</p>
+                <p class="text-gray-500 text-sm">Pilih peranan anda dan masukkan maklumat log masuk.</p>
+            </div>
+
+            {{-- Role Tabs --}}
+            <div class="flex rounded-xl bg-gray-100 p-1 mb-6" id="role-tabs">
+                <button type="button" data-role="customer" class="role-tab flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 bg-white text-primary-700 shadow-sm">Pelanggan</button>
+                <button type="button" data-role="seller" class="role-tab flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 text-gray-500 hover:text-gray-700">Penjual</button>
+                <button type="button" data-role="admin" class="role-tab flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 text-gray-500 hover:text-gray-700">Admin</button>
             </div>
 
             @if($errors->any())
@@ -40,11 +47,16 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('login.submit') }}" class="space-y-5">
+            <form method="POST" action="{{ route('login.submit') }}" class="space-y-4">
                 @csrf
+                <input type="hidden" name="role" id="login-role" value="{{ old('role', 'customer') }}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Campus ID / NIM</label>
+                    <input type="text" name="campus_id" value="{{ old('campus_id') }}" placeholder="cth: 2024010001" class="input-styled" required autofocus>
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mel</label>
-                    <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" class="input-styled" required autofocus>
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" class="input-styled" required>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Kata Laluan</label>
@@ -67,4 +79,37 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.role-tab');
+    const roleInput = document.getElementById('login-role');
+    
+    // Set initial state from old value
+    const currentRole = roleInput.value || 'customer';
+    tabs.forEach(tab => {
+        if (tab.dataset.role === currentRole) {
+            tab.classList.add('bg-white', 'text-primary-700', 'shadow-sm');
+            tab.classList.remove('text-gray-500');
+        } else {
+            tab.classList.remove('bg-white', 'text-primary-700', 'shadow-sm');
+            tab.classList.add('text-gray-500');
+        }
+    });
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => {
+                t.classList.remove('bg-white', 'text-primary-700', 'shadow-sm');
+                t.classList.add('text-gray-500');
+            });
+            this.classList.add('bg-white', 'text-primary-700', 'shadow-sm');
+            this.classList.remove('text-gray-500');
+            roleInput.value = this.dataset.role;
+        });
+    });
+});
+</script>
 @endsection

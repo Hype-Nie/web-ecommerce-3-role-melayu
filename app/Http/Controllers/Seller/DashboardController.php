@@ -11,12 +11,12 @@ class DashboardController extends Controller
     public function index()
     {
         $seller      = auth()->user();
-        $productIds  = $seller->products()->pluck('id');
+        $productIds  = $seller->products()->pluck('id')->toArray();
 
         $totalProducts = $seller->products()->count();
-        $lowStock      = $seller->products()->where('stock', '<=', 5)->where('stock', '>', 0)->count();
+        $totalOrders   = Order::whereHas('items', fn ($q) => $q->whereIn('product_id', $productIds))->count();
         $newOrders     = OrderItem::whereIn('product_id', $productIds)
-                            ->whereHas('order', fn ($q) => $q->where('status', 'pending'))
+                            ->whereHas('order', fn ($q) => $q->where('status', 'sold'))
                             ->count();
 
         $monthlyRevenue = OrderItem::whereIn('product_id', $productIds)
@@ -36,7 +36,7 @@ class DashboardController extends Controller
                             ->sum('subtotal'));
 
         return view('seller.dashboard', compact(
-            'totalProducts', 'newOrders', 'monthlyRevenue', 'lowStock', 'recentOrders', 'chartLabels', 'chartData'
+            'totalProducts', 'newOrders', 'monthlyRevenue', 'totalOrders', 'recentOrders', 'chartLabels', 'chartData'
         ));
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Papan Pemuka') — Admin CampusBy</title>
+    <title>@yield('title', 'Papan Pemuka') — Admin CampusBuy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -20,7 +20,7 @@
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     <div>
-                        <h1 class="text-white font-bold text-lg tracking-tight">CampusBy</h1>
+                        <h1 class="text-white font-bold text-lg tracking-tight">CampusBuy</h1>
                         <p class="text-xs text-gray-500">Panel Admin</p>
                     </div>
                 </a>
@@ -52,10 +52,7 @@
                     Kategori
                 </a>
 
-                <a href="{{ route('admin.shipping') }}" class="nav-item {{ request()->routeIs('admin.shipping') ? 'nav-item-active' : 'nav-item-default' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1"/></svg>
-                    Penghantaran
-                </a>
+
 
                 <p class="text-xs uppercase tracking-wider text-gray-600 font-semibold px-4 mt-6 mb-3">Laporan</p>
 

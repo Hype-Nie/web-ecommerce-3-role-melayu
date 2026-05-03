@@ -14,7 +14,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'phone', 'shop_name', 'is_active',
+        'name', 'campus_id', 'email', 'password', 'role', 'phone', 'shop_name', 'is_active',
     ];
 
     protected $hidden = [
@@ -39,5 +39,4 @@ class User extends Authenticatable
     public function products(): HasMany  { return $this->hasMany(Product::class, 'seller_id'); }
     public function orders(): HasMany    { return $this->hasMany(Order::class); }
     public function addresses(): HasMany { return $this->hasMany(Address::class); }
-    public function cartItems(): HasMany { return $this->hasMany(CartItem::class); }
 }

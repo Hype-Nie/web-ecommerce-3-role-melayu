@@ -9,22 +9,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'user_id', 'address_id', 'shipping_type_id',
-        'subtotal', 'shipping_cost', 'total',
+        'order_number', 'user_id', 'address_id',
+        'subtotal', 'total',
         'status', 'payment_method', 'payment_status',
-        'tracking_number', 'notes',
+        'whatsapp_sent', 'notes',
     ];
 
     protected $casts = [
         'subtotal'      => 'decimal:2',
-        'shipping_cost' => 'decimal:2',
         'total'         => 'decimal:2',
+        'whatsapp_sent' => 'boolean',
     ];
 
     /* ---------- Relationships ---------- */
     public function user(): BelongsTo         { return $this->belongsTo(User::class); }
     public function address(): BelongsTo      { return $this->belongsTo(Address::class); }
-    public function shippingType(): BelongsTo { return $this->belongsTo(ShippingType::class); }
     public function items(): HasMany          { return $this->hasMany(OrderItem::class); }
 
     /* ---------- Helpers ---------- */
@@ -32,6 +31,7 @@ class Order extends Model
     {
         return match ($this->status) {
             'pending'    => 'Menunggu',
+            'sold'       => 'Terjual',
             'processing' => 'Diproses',
             'shipped'    => 'Dihantar',
             'completed'  => 'Selesai',
@@ -44,6 +44,7 @@ class Order extends Model
     {
         return match ($this->status) {
             'pending'    => 'badge-info',
+            'sold'       => 'badge-success',
             'processing' => 'badge-warning',
             'shipped'    => 'badge-success',
             'completed'  => 'badge-gray',
@@ -56,6 +57,6 @@ class Order extends Model
     {
         $last = static::orderBy('id', 'desc')->first();
         $num  = $last ? intval(substr($last->order_number, 2)) + 1 : 1001;
-        return 'KD' . $num;
+        return 'CB' . $num;
     }
 }
