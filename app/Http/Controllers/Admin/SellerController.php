@@ -17,15 +17,17 @@ class SellerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users',
-            'phone'    => 'required|string|max:20',
-            'shop_name'=> 'required|string|max:255',
-            'password' => 'required|string|min:6',
+            'name'      => 'required|string|max:255',
+            'campus_id' => 'required|string|max:50|unique:users',
+            'email'     => 'required|email|unique:users',
+            'phone'     => 'required|string|max:20',
+            'shop_name' => 'required|string|max:255',
+            'password'  => 'required|string|min:6',
         ]);
 
         User::create([
             'name'      => $request->name,
+            'campus_id' => $request->campus_id,
             'email'     => $request->email,
             'phone'     => $request->phone,
             'shop_name' => $request->shop_name,

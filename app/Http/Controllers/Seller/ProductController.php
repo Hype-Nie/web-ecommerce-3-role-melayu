@@ -25,7 +25,6 @@ class ProductController extends Controller
             'name'        => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
             'description' => 'nullable|string',
             'images'      => 'nullable|array|max:5',
             'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -37,7 +36,6 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'price'       => $request->price,
             'old_price'   => $request->old_price,
-            'stock'       => $request->stock,
             'description' => $request->description,
         ]);
 
@@ -70,7 +68,7 @@ class ProductController extends Controller
             'description' => $product->description,
             'price'       => $product->price,
             'old_price'   => $product->old_price,
-            'stock'       => $product->stock,
+
             'is_active'   => $product->is_active,
             'category_id' => $product->category_id,
             'category'    => $product->category->name,
@@ -91,7 +89,6 @@ class ProductController extends Controller
             'name'        => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
             'description' => 'nullable|string',
             'images'      => 'nullable|array|max:5',
             'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -105,7 +102,6 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'price'       => $request->price,
             'old_price'   => $request->old_price,
-            'stock'       => $request->stock,
             'description' => $request->description,
         ]);
 

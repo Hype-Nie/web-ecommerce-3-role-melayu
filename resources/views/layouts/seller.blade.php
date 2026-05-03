@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Papan Pemuka') — Penjual CampusBy</title>
+    <title>@yield('title', 'Papan Pemuka') — Penjual CampusBuy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -16,7 +16,7 @@
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div>
-                    <h1 class="text-white font-bold text-lg">CampusBy</h1>
+                    <h1 class="text-white font-bold text-lg">CampusBuy</h1>
                     <p class="text-xs text-gray-500">Panel Penjual</p>
                 </div>
             </a>
@@ -66,9 +66,8 @@
                 <div class="flex items-center gap-3">
                     {{-- Notifications --}}
                     @php
-                        $newOrdersCount = \App\Models\OrderItem::whereIn('product_id', auth()->user()->products()->pluck('id'))->whereHas('order', fn($q) => $q->where('status', 'pending'))->count();
-                        $lowStockCount = auth()->user()->products()->where('stock', '<=', 5)->count();
-                        $totalNotifications = $newOrdersCount + $lowStockCount;
+                        $newOrdersCount = \App\Models\OrderItem::whereIn('product_id', auth()->user()->products()->pluck('id')->toArray())->whereHas('order', fn($q) => $q->where('status', 'sold'))->count();
+                        $totalNotifications = $newOrdersCount;
                     @endphp
                     <div class="relative" id="notification-dropdown-container">
                         <button onclick="document.getElementById('notification-menu').classList.toggle('hidden')" class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors">
@@ -87,12 +86,6 @@
                                     <a href="{{ route('seller.transactions') }}" class="block p-4 hover:bg-gray-50 border-b border-gray-50">
                                         <p class="text-sm font-semibold text-gray-900">Pesanan Baru</p>
                                         <p class="text-xs text-gray-500 mt-1">Terdapat {{ $newOrdersCount }} pesanan baru menunggu untuk diproses.</p>
-                                    </a>
-                                    @endif
-                                    @if($lowStockCount > 0)
-                                    <a href="{{ route('seller.products') }}" class="block p-4 hover:bg-gray-50">
-                                        <p class="text-sm font-semibold text-gray-900">Stok Rendah</p>
-                                        <p class="text-xs text-gray-500 mt-1">Terdapat {{ $lowStockCount }} produk yang kehabisan atau hampir kehabisan stok.</p>
                                     </a>
                                     @endif
                                 @endif

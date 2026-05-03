@@ -12,16 +12,16 @@
                 <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-white/10 backdrop-blur flex items-center justify-center">
                     <svg class="w-12 h-12 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                 </div>
-                <h2 class="text-2xl font-bold text-white mb-3">Sertai Komuniti Kami!</h2>
-                <p class="text-primary-200/70 text-sm max-w-xs mx-auto">Daftar sekarang dan nikmati pelbagai tawaran istimewa dan penghantaran percuma untuk pembelian pertama anda.</p>
+                <h2 class="text-2xl font-bold text-white mb-3">Sertai CampusBuy!</h2>
+                <p class="text-primary-200/70 text-sm max-w-xs mx-auto">Daftar sekarang dan mula jual-beli di kampus anda dengan mudah dan selamat.</p>
             </div>
         </div>
 
         {{-- Right Form --}}
         <div class="p-8 lg:p-12">
-            <div class="mb-8">
+            <div class="mb-6">
                 <h1 class="text-2xl font-bold text-gray-900 mb-2">Daftar Akaun Baru</h1>
-                <p class="text-gray-500 text-sm">Lengkapkan butiran di bawah untuk mendaftar sebagai pelanggan.</p>
+                <p class="text-gray-500 text-sm">Lengkapkan butiran di bawah untuk mendaftar.</p>
             </div>
 
             @if($errors->any())
@@ -34,51 +34,64 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('register.submit') }}" class="space-y-4">
+            <form method="POST" action="{{ route('register.submit') }}" class="space-y-4" id="register-form">
                 @csrf
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama Penuh</label>
                     <input type="text" name="name" value="{{ old('name') }}" placeholder="cth: Ahmad bin Ali" class="input-styled" required autofocus>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mel</label>
-                    <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" class="input-styled" required>
-                </div>
                 <div class="grid sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">No. Telefon</label>
-                        <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="cth: 012-3456789" class="input-styled" required>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Campus ID / NIM</label>
+                        <input type="text" name="campus_id" value="{{ old('campus_id') }}" placeholder="cth: 2024010001" class="input-styled" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mel</label>
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" class="input-styled" required>
                     </div>
                 </div>
                 <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">No. Telefon</label>
+                    <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="cth: 012-3456789" class="input-styled" required>
+                </div>
+
+                {{-- Role Selection --}}
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Daftar Sebagai</label>
                     <div class="grid grid-cols-2 gap-4">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="role" value="customer" class="peer sr-only" {{ old('role', 'customer') == 'customer' ? 'checked' : '' }}>
+                        <label class="cursor-pointer" id="role-customer-label">
+                            <input type="radio" name="role" value="customer" class="peer sr-only" id="role-customer" {{ old('role', 'customer') == 'customer' ? 'checked' : '' }}>
                             <div class="rounded-xl border-2 border-gray-100 p-4 hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all">
                                 <div class="flex items-center gap-3 mb-1">
-                                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 peer-checked:bg-primary-500 peer-checked:text-white transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                     </div>
                                     <p class="font-bold text-gray-900">Pelanggan</p>
                                 </div>
-                                <p class="text-xs text-gray-500 ml-11">Beli-belah dengan mudah.</p>
+                                <p class="text-xs text-gray-500 ml-11">Beli produk di kampus.</p>
                             </div>
                         </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="role" value="seller" class="peer sr-only" {{ old('role') == 'seller' ? 'checked' : '' }}>
+                        <label class="cursor-pointer" id="role-seller-label">
+                            <input type="radio" name="role" value="seller" class="peer sr-only" id="role-seller" {{ old('role') == 'seller' ? 'checked' : '' }}>
                             <div class="rounded-xl border-2 border-gray-100 p-4 hover:bg-gray-50 peer-checked:border-primary-500 peer-checked:bg-primary-50 transition-all">
                                 <div class="flex items-center gap-3 mb-1">
-                                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 peer-checked:bg-primary-500 peer-checked:text-white transition-colors">
+                                    <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                     </div>
                                     <p class="font-bold text-gray-900">Penjual</p>
                                 </div>
-                                <p class="text-xs text-gray-500 ml-11">Mula berniaga hari ini.</p>
+                                <p class="text-xs text-gray-500 ml-11">Mula berniaga di kampus.</p>
                             </div>
                         </label>
                     </div>
                 </div>
+
+                {{-- Shop Name (Seller Only) --}}
+                <div id="shop-name-field" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama Kedai</label>
+                    <input type="text" name="shop_name" value="{{ old('shop_name') }}" placeholder="cth: Kedai Ali Campus" class="input-styled" id="shop-name-input">
+                </div>
+
                 <div class="grid sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Kata Laluan</label>
@@ -107,4 +120,29 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleCustomer = document.getElementById('role-customer');
+    const roleSeller = document.getElementById('role-seller');
+    const shopField = document.getElementById('shop-name-field');
+    const shopInput = document.getElementById('shop-name-input');
+
+    function toggleShopName() {
+        if (roleSeller.checked) {
+            shopField.classList.remove('hidden');
+            shopInput.required = true;
+        } else {
+            shopField.classList.add('hidden');
+            shopInput.required = false;
+        }
+    }
+
+    roleCustomer.addEventListener('change', toggleShopName);
+    roleSeller.addEventListener('change', toggleShopName);
+    toggleShopName(); // init
+});
+</script>
 @endsection

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Laman Utama')
-@section('meta_description', 'CampusBy — Platform e-dagang terbaik di Malaysia. Beli-belah dalam talian dengan mudah dan selamat.')
+@section('meta_description', 'CampusBuy — Marketplace eksklusif kampus anda. Jual-beli dalam kampus dengan mudah dan selamat.')
 
 @section('content')
 {{-- HERO --}}
@@ -14,12 +14,12 @@
             <div class="animate-fade-in-up">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-primary-200 text-sm font-medium mb-6 backdrop-blur-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    Platform E-Dagang #1 Malaysia
+                    Marketplace Eksklusif Kampus
                 </span>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-                    Beli-Belah <br><span class="text-primary-300">Tanpa Sempadan</span>
+                    Jual Beli <br><span class="text-primary-300">Di Kampus</span>
                 </h1>
-                <p class="text-lg text-primary-100/80 mb-8 max-w-lg">Temui ribuan produk berkualiti dari penjual terpercaya di seluruh Malaysia. Penghantaran pantas, pembayaran selamat.</p>
+                <p class="text-lg text-primary-100/80 mb-8 max-w-lg">Temui pelbagai produk dari pelajar dan penjual di kampus anda. Transaksi mudah melalui WhatsApp.</p>
                 <div class="flex flex-wrap gap-4">
                     <a href="#produk-popular" class="btn-primary !bg-white !text-primary-700 hover:!bg-primary-50">Mula Membeli</a>
                     <a href="{{ route('register') }}" class="btn-primary !border-white/20 !text-white hover:!">Daftar Sekarang</a>
@@ -27,7 +27,7 @@
                 <div class="flex items-center gap-8 mt-10 text-sm">
                     <div><span class="text-2xl font-bold text-white">10K+</span><p class="text-primary-200/70">Produk</p></div>
                     <div class="w-px h-10 bg-white/10"></div>
-                    <div><span class="text-2xl font-bold text-white">5K+</span><p class="text-primary-200/70">Pelanggan</p></div>
+                    <div><span class="text-2xl font-bold text-white">5K+</span><p class="text-primary-200/70">Pelajar</p></div>
                     <div class="w-px h-10 bg-white/10"></div>
                     <div><span class="text-2xl font-bold text-white">500+</span><p class="text-primary-200/70">Penjual</p></div>
                 </div>
@@ -36,7 +36,7 @@
                 <div class="relative">
                     <div class="w-80 h-80 rounded-3xl gradient-primary opacity-20 blur-2xl absolute top-8 left-8"></div>
                     <div class="relative w-80 h-80 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center">
-                        <svg class="w-32 h-32 text-primary-300/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                        <svg class="w-32 h-32 text-primary-300/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/></svg>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
 <section class="py-16 lg:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12 reveal">
         <h2 class="text-3xl font-bold text-gray-900 mb-3">Kategori Pilihan</h2>
-        <p class="text-gray-500 max-w-md mx-auto">Terokai pelbagai kategori produk kegemaran anda</p>
+        <p class="text-gray-500 max-w-md mx-auto">Terokai pelbagai kategori produk di kampus anda</p>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6">
         @php
@@ -82,7 +82,7 @@
         <div class="flex items-end justify-between mb-12 reveal">
             <div>
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Produk Popular</h2>
-                <p class="text-gray-500">Produk terlaris pilihan pelanggan kami</p>
+                <p class="text-gray-500">Produk terlaris pilihan pelajar kampus</p>
             </div>
             <a href="{{ route('produk.index') }}" class="hidden sm:inline-flex items-center gap-1 text-primary-600 font-semibold hover:text-primary-700 transition-colors">
                 Lihat Semua <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -124,16 +124,16 @@
         <div class="relative rounded-3xl overflow-hidden gradient-primary p-8 lg:p-10 text-white">
             <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-12 translate-x-12"></div>
             <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-sm font-medium mb-4">Tawaran Istimewa</span>
-            <h3 class="text-2xl lg:text-3xl font-bold mb-3">Diskaun 50% Produk Elektronik</h3>
-            <p class="text-primary-100/80 mb-6">Sah sehingga akhir bulan ini sahaja!</p>
-            <a href="#" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-700 font-semibold rounded-xl hover:bg-primary-50 transition-all duration-300">Beli Sekarang</a>
+            <h3 class="text-2xl lg:text-3xl font-bold mb-3">Diskaun Untuk Pelajar</h3>
+            <p class="text-primary-100/80 mb-6">Tawaran eksklusif untuk warga kampus!</p>
+            <a href="{{ route('produk.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-700 font-semibold rounded-xl hover:bg-primary-50 transition-all duration-300">Lihat Produk</a>
         </div>
         <div class="relative rounded-3xl overflow-hidden bg-gray-900 p-8 lg:p-10 text-white">
             <div class="absolute top-0 right-0 w-48 h-48 bg-primary-600/10 rounded-full -translate-y-12 translate-x-12"></div>
-            <span class="inline-block px-3 py-1 rounded-full bg-primary-600/30 text-primary-300 text-sm font-medium mb-4">Penghantaran Percuma</span>
-            <h3 class="text-2xl lg:text-3xl font-bold mb-3">Beli Lebih RM150</h3>
-            <p class="text-gray-400 mb-6">Nikmati penghantaran percuma ke seluruh Malaysia.</p>
-            <a href="#" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all duration-300">Ketahui Lagi</a>
+            <span class="inline-block px-3 py-1 rounded-full bg-primary-600/30 text-primary-300 text-sm font-medium mb-4">WhatsApp Order</span>
+            <h3 class="text-2xl lg:text-3xl font-bold mb-3">Transaksi Mudah</h3>
+            <p class="text-gray-400 mb-6">Pesan terus melalui WhatsApp. Cepat, mudah dan selamat.</p>
+            <a href="{{ route('produk.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all duration-300">Mula Sekarang</a>
         </div>
     </div>
 </section>
@@ -141,8 +141,8 @@
 {{-- CTA --}}
 <section class="py-20 lg:py-28">
     <div class="max-w-4xl mx-auto px-4 text-center reveal">
-        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Sedia Untuk Mula Membeli?</h2>
-        <p class="text-gray-500 mb-8 max-w-lg mx-auto">Daftar sekarang dan nikmati pengalaman membeli-belah dalam talian yang terbaik.</p>
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Sedia Untuk Mula?</h2>
+        <p class="text-gray-500 mb-8 max-w-lg mx-auto">Daftar sekarang dan nikmati pengalaman jual-beli eksklusif di kampus anda.</p>
         <div class="flex flex-wrap justify-center gap-4">
             <a href="{{ route('register') }}" class="btn-primary text-lg !px-8 !py-4">Daftar Percuma</a>
             <a href="{{ route('login') }}" class="btn-secondary text-lg !px-8 !py-4">Log Masuk</a>

@@ -7,7 +7,7 @@
                 <div class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
-                <span class="text-xl font-bold text-gray-900">Campus<span class="text-primary-600">By</span></span>
+                <span class="text-xl font-bold text-gray-900">Campus<span class="text-primary-600">Buy</span></span>
             </a>
 
             {{-- Search Bar (Desktop) --}}
@@ -20,15 +20,6 @@
 
             {{-- Right Actions --}}
             <div class="flex items-center gap-2">
-                {{-- Cart --}}
-                <a href="{{ route('cart') }}" class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors" id="nav-cart-btn">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
-                    @auth
-                        @php $cartCount = auth()->user()->cartItems()->count(); @endphp
-                        <span id="nav-cart-badge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center {{ $cartCount > 0 ? 'animate-bounce-in' : 'hidden' }}">{{ $cartCount }}</span>
-                    @endauth
-                </a>
-
                 {{-- User Actions (Desktop) --}}
                 @auth
                 <div class="hidden sm:block relative group">
@@ -81,7 +72,6 @@
         <div class="px-4 pb-4 space-y-1">
             <a href="{{ route('landing') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-primary-50 hover:text-primary-700 font-medium transition-colors">Laman Utama</a>
             <a href="{{ route('produk.index') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-primary-50 hover:text-primary-700 font-medium transition-colors">Semua Produk</a>
-            <a href="{{ route('cart') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-primary-50 hover:text-primary-700 font-medium transition-colors">Troli</a>
             @guest
             <a href="{{ route('login') }}" class="block px-4 py-3 rounded-xl bg-primary-600 text-white font-semibold text-center mt-2">Log Masuk</a>
             @endguest

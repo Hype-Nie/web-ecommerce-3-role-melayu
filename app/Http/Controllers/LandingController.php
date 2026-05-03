@@ -12,7 +12,6 @@ class LandingController extends Controller
     {
         $categories = Category::where('is_active', true)->withCount('products')->get();
         $products   = Product::where('is_active', true)
-                        ->where('stock', '>', 0)
                         ->with('seller', 'category', 'images')
                         ->latest()
                         ->take(8)
@@ -24,7 +23,6 @@ class LandingController extends Controller
     public function catalog(Request $request)
     {
         $query = Product::where('is_active', true)
-                    ->where('stock', '>', 0)
                     ->with('seller', 'category', 'images');
 
         // Search

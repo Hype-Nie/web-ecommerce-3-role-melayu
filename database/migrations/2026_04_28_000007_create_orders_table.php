@@ -13,14 +13,12 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('address_id')->nullable()->constrained('addresses')->nullOnDelete();
-            $table->foreignId('shipping_type_id')->nullable()->constrained('shipping_types')->nullOnDelete();
             $table->decimal('subtotal', 10, 2);
-            $table->decimal('shipping_cost', 10, 2)->default(0);
             $table->decimal('total', 10, 2);
-            $table->enum('status', ['pending', 'processing', 'shipped', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'sold', 'processing', 'shipped', 'completed', 'cancelled'])->default('pending');
             $table->string('payment_method')->nullable();
             $table->enum('payment_status', ['unpaid', 'paid', 'refunded'])->default('unpaid');
-            $table->string('tracking_number')->nullable();
+            $table->boolean('whatsapp_sent')->default(false);
             $table->text('notes')->nullable();
             $table->timestamps();
         });

@@ -42,7 +42,7 @@
             <thead><tr><th>ID</th><th>Pelanggan</th><th>Jumlah</th><th>Status</th><th>Tarikh</th></tr></thead>
             <tbody>
                 @forelse($recentOrders as $o)
-                <tr>
+                <tr class="cursor-pointer hover:bg-primary-50/50" onclick="showOrderDetail({{ $o->id }})">
                     <td class="font-semibold text-gray-900">#{{ $o->order_number }}</td>
                     <td>{{ $o->user->name }}</td>
                     <td class="font-semibold">RM {{ number_format($o->total, 2) }}</td>
@@ -56,6 +56,17 @@
         </table>
     </div>
 </div>
+
+{{-- Order Detail Modal --}}
+<div id="modal-order-detail" class="modal-overlay">
+    <div class="modal-content max-w-2xl">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">Butiran Pesanan</h3>
+            <button data-modal-close class="p-2 rounded-lg hover:bg-gray-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="p-6 max-h-[60vh] overflow-y-auto" id="order-detail-body"><p class="text-center text-gray-400">Memuatkan...</p></div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -64,10 +75,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('revenueChart').getContext('2d');
     
-    // Create gradient
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(14, 165, 233, 0.2)'); // primary-500 with opacity
-    gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+    gradient.addColorStop(0, 'rgba(225, 29, 72, 0.2)');
+    gradient.addColorStop(1, 'rgba(225, 29, 72, 0)');
     
     new Chart(ctx, {
         type: 'line',
@@ -76,11 +86,11 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 label: 'Pendapatan (RM)',
                 data: {!! json_encode($chartData) !!},
-                borderColor: '#0ea5e9', // primary-500
+                borderColor: '#e11d48',
                 backgroundColor: gradient,
                 borderWidth: 2,
                 pointBackgroundColor: '#ffffff',
-                pointBorderColor: '#0ea5e9',
+                pointBorderColor: '#e11d48',
                 pointBorderWidth: 2,
                 pointRadius: 4,
                 pointHoverRadius: 6,
@@ -128,5 +138,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function showOrderDetail(id) {
+    const modal = document.getElementById('modal-order-detail');
+    const body = document.getElementById('order-detail-body');
+    body.innerHTML = '<p class="text-center text-gray-400">Memuatkan...</p>';
+    modal.classList.add('active'); document.body.classList.add('overflow-hidden');
+    fetch(`/admin/pesanan/${id}`, { headers: { 'Accept': 'application/json' }})
+        .then(r => r.json())
+        .then(d => {
+            let itemsHtml = d.items.map(i => `
+                <div class="flex items-center justify-between py-2">
+                    <div><p class="font-medium text-sm text-gray-900">${i.name}</p><p class="text-xs text-gray-500">x${i.quantity} @ RM ${i.price}</p></div>
+                    <span class="font-semibold text-sm">RM ${i.subtotal}</span>
+                </div>
+            `).join('');
+            body.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div><h4 class="text-xl font-bold text-gray-900">#${d.order_number}</h4><p class="text-sm text-gray-500">${d.created_at}</p></div>
+                    <span class="badge ${d.status_badge}">${d.status}</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                    <div><p class="text-gray-400 text-xs">Pelanggan</p><p class="font-medium">${d.customer}</p></div>
+                    <div><p class="text-gray-400 text-xs">Campus ID</p><p class="font-medium">${d.campus_id}</p></div>
+                    <div><p class="text-gray-400 text-xs">E-mel</p><p class="font-medium">${d.email}</p></div>
+                    <div><p class="text-gray-400 text-xs">Telefon</p><p class="font-medium">${d.phone || '-'}</p></div>
+                    <div><p class="text-gray-400 text-xs">Kaedah Bayaran</p><p class="font-medium">${d.payment_method}</p></div>
+                    <div><p class="text-gray-400 text-xs">WhatsApp</p><p class="font-medium">${d.whatsapp_sent ? '✅ Terhantar' : '❌ Belum'}</p></div>
+                </div>
+                <div><p class="text-gray-400 text-xs mb-1">Alamat</p><p class="text-sm text-gray-700">${d.address}</p></div>
+                <div class="mt-4 border-t border-gray-100 pt-4">
+                    <p class="font-semibold text-sm text-gray-900 mb-2">Item Pesanan</p>
+                    <div class="divide-y divide-gray-100">${itemsHtml}</div>
+                    <div class="border-t border-gray-200 mt-3 pt-3 flex justify-between">
+                        <span class="font-bold text-gray-900">Jumlah</span>
+                        <span class="text-lg font-bold text-primary-600">RM ${d.total}</span>
+                    </div>
+                </div>
+            `;
+        });
+}
 </script>
 @endsection

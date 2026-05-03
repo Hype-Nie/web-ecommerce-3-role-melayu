@@ -12,7 +12,7 @@
     <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="relative">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" placeholder="Cari penjual..." class="input-search w-64">
+            <input type="text" id="seller-search" placeholder="Cari penjual..." class="input-search w-64">
         </div>
         <button data-modal-open="modal-add-seller" class="btn-primary text-sm !px-4 !py-2.5 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -20,7 +20,7 @@
         </button>
     </div>
     <div class="overflow-x-auto">
-        <table class="table-modern">
+        <table class="table-modern" id="sellers-table">
             <thead><tr><th>Penjual</th><th>E-mel</th><th>Kedai</th><th>Produk</th><th>Status</th><th>Tindakan</th></tr></thead>
             <tbody>
                 @forelse($sellers as $s)
@@ -60,6 +60,7 @@
         <form action="{{ route('admin.sellers.store') }}" method="POST">@csrf
             <div class="p-6 space-y-4">
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Nama</label><input type="text" name="name" class="input-styled" required></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Campus ID / NIM</label><input type="text" name="campus_id" class="input-styled" required></div>
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Nama Kedai</label><input type="text" name="shop_name" class="input-styled" required></div>
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">E-mel</label><input type="email" name="email" class="input-styled" required></div>
                 <div><label class="block text-sm font-medium text-gray-700 mb-1">Nombor Telefon</label><input type="tel" name="phone" class="input-styled" required></div>
@@ -110,6 +111,15 @@
 
 @section('scripts')
 <script>
+// Seller search filter
+document.getElementById('seller-search').addEventListener('keyup', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('#sellers-table tbody tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+});
+
 function showSeller(id) {
     const modal = document.getElementById('modal-seller-detail');
     const body = document.getElementById('seller-detail-body');
