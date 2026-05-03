@@ -13,14 +13,14 @@ class CheckoutController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity'   => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1',
         ]);
 
-        $product  = \App\Models\Product::with('seller')->findOrFail($request->product_id);
+        $product = \App\Models\Product::with('seller')->findOrFail($request->product_id);
         $quantity = $request->quantity;
         $subtotal = $product->price * $quantity;
-        $user     = auth()->user();
-        
+        $user = auth()->user();
+
         $addresses = $user->addresses()->orderByDesc('is_default')->get();
 
         return view('checkout', compact('product', 'quantity', 'subtotal', 'addresses'));
@@ -29,57 +29,57 @@ class CheckoutController extends Controller
     public function placeOrder(Request $request)
     {
         $request->validate([
-            'product_id'     => 'required|exists:products,id',
-            'quantity'       => 'required|integer|min:1',
-            'address_id'     => 'required|exists:addresses,id',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'address_id' => 'required|exists:addresses,id',
             'payment_method' => 'required|string',
         ]);
 
-        $user     = auth()->user();
-        $product  = \App\Models\Product::with('seller')->findOrFail($request->product_id);
+        $user = auth()->user();
+        $product = \App\Models\Product::with('seller')->findOrFail($request->product_id);
         $quantity = $request->quantity;
         $subtotal = $product->price * $quantity;
-        $total    = $subtotal;
+        $total = $subtotal;
 
         $order = null;
 
         DB::transaction(function () use ($user, $product, $quantity, $request, $subtotal, $total, &$order) {
             $order = Order::create([
-                'order_number'   => Order::generateOrderNumber(),
-                'user_id'        => $user->id,
-                'address_id'     => $request->address_id,
-                'subtotal'       => $subtotal,
-                'total'          => $total,
-                'status'         => 'sold',
+                'order_number' => Order::generateOrderNumber(),
+                'user_id' => $user->id,
+                'address_id' => $request->address_id,
+                'subtotal' => $subtotal,
+                'total' => $total,
+                'status' => 'sold',
                 'payment_method' => $request->payment_method,
                 'payment_status' => 'unpaid',
-                'whatsapp_sent'  => true,
+                'whatsapp_sent' => true,
             ]);
 
             OrderItem::create([
-                'order_id'      => $order->id,
-                'product_id'    => $product->id,
-                'product_name'  => $product->name,
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'product_name' => $product->name,
                 'product_price' => $product->price,
-                'quantity'      => $quantity,
-                'subtotal'      => $subtotal,
+                'quantity' => $quantity,
+                'subtotal' => $subtotal,
             ]);
         });
 
         // Build WhatsApp message
         $address = $order->address;
-        $message = "🛒 *Pesanan Baru dari CampusBuy*\n\n";
-        $message .= "📋 *No. Pesanan:* {$order->order_number}\n";
-        $message .= "👤 *Pelanggan:* {$user->name}\n";
-        $message .= "🆔 *Campus ID:* {$user->campus_id}\n";
+        $message = "[*Pesanan Baru dari CampusBuy*]\n\n";
+        $message .= "*No. Pesanan:* {$order->order_number}\n";
+        $message .= "*Pelanggan:* {$user->name}\n";
+        $message .= "*Campus ID:* {$user->campus_id}\n";
         if ($address) {
-            $message .= "📍 *Alamat:* {$address->recipient_name}, {$address->phone}, {$address->address_line}, {$address->city}, {$address->state} {$address->postcode}\n";
+            $message .= "*Alamat:* {$address->recipient_name}, {$address->phone}, {$address->address_line}, {$address->city}, {$address->state} {$address->postcode}\n";
         }
-        $message .= "\n📦 *Item Pesanan:*\n";
-        $message .= "• {$product->name} x{$quantity} — RM " . number_format($subtotal, 2) . "\n";
-        $message .= "\n💰 *Jumlah:* RM " . number_format($total, 2) . "\n";
-        $message .= "💳 *Kaedah Bayaran:* {$order->payment_method}\n";
-        $message .= "\nTerima kasih kerana menggunakan CampusBuy! 🎓";
+        $message .= "\n[*Item Pesanan*]\n";
+        $message .= "- {$product->name} x{$quantity} : RM " . number_format($subtotal, 2) . "\n";
+        $message .= "\n*Jumlah:* RM " . number_format($total, 2) . "\n";
+        $message .= "*Kaedah Bayaran:* {$order->payment_method}\n";
+        $message .= "\nTerima kasih kerana menggunakan CampusBuy!";
 
         // Get seller phone from product
         $sellerPhone = $product->seller->phone ?? '60123456789';
