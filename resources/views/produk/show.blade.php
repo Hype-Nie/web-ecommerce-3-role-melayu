@@ -46,17 +46,29 @@
                 <span class="text-3xl font-bold text-primary-600">RM {{ number_format($product->price, 2) }}</span>
                 @if($product->old_price)<span class="text-lg text-gray-400 line-through">RM {{ number_format($product->old_price, 2) }}</span><span class="badge badge-success">-{{ $product->discountPercent() }}%</span>@endif
             </div>
-            <p class="text-gray-600 leading-relaxed mb-6">{{ $product->description }}</p>
+            <p class="text-gray-600 leading-relaxed mb-4">{{ $product->description }}</p>
+
+            @if($product->quantity > 0)
+            <div class="flex items-center gap-2 mb-4 text-sm">
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span class="text-green-700 font-medium">Tersedia - {{ $product->quantity }} unit</span>
+            </div>
+            @else
+            <div class="flex items-center gap-2 mb-4 text-sm">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <span class="text-red-600 font-medium">Tiada stok</span>
+            </div>
+            @endif
             <div class="flex items-center gap-2 mb-6 text-sm"><span class="font-semibold text-primary-600">Sedia Ditempah</span></div>
 
             {{-- Direct Checkout --}}
             @auth
-            @if($product->product_status !== 'sold')
+            @if($product->product_status !== 'sold' && $product->quantity > 0)
             <form action="{{ route('checkout') }}" method="GET" class="flex gap-3 mb-3">
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden">
                     <button type="button" class="px-3 py-3 text-gray-500 hover:bg-gray-50" onclick="this.parentElement.querySelector('input').stepDown()">−</button>
-                    <input type="number" name="quantity" value="1" min="1" class="w-14 text-center border-0 focus:ring-0 text-sm font-semibold">
+                    <input type="number" name="quantity" value="1" min="1" max="{{ $product->quantity }}" class="w-14 text-center border-0 focus:ring-0 text-sm font-semibold">
                     <button type="button" class="px-3 py-3 text-gray-500 hover:bg-gray-50" onclick="this.parentElement.querySelector('input').stepUp()">+</button>
                 </div>
                 <button type="submit" class="btn-primary flex-1 text-center flex items-center justify-center gap-2">
@@ -64,10 +76,15 @@
                     <span>Beli Sekarang</span>
                 </button>
             </form>
-            @else
+            @elseif($product->product_status === 'sold')
             <div class="btn-disabled flex-1 text-center flex items-center justify-center gap-2 mb-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 <span>Produk Ini Telah Terjual</span>
+            </div>
+            @else
+            <div class="btn-disabled flex-1 text-center flex items-center justify-center gap-2 mb-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <span>Tiada Stok</span>
             </div>
             @endif
             @else
