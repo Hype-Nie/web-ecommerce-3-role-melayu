@@ -103,7 +103,7 @@ class CheckoutController extends Controller
         // Normalize phone number for WhatsApp
         $sellerPhone = preg_replace('/[^0-9]/', '', $sellerPhone);
         if (str_starts_with($sellerPhone, '0')) {
-            $sellerPhone = '62'.substr($sellerPhone, 1);
+            $sellerPhone = '60'.substr($sellerPhone, 1);
         }
 
         $waUrl = 'https://wa.me/'.$sellerPhone.'?text='.urlencode($message);
