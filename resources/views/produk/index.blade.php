@@ -88,6 +88,9 @@
                     @if($p->discountPercent())
                     <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-primary-600 text-white text-xs font-semibold">-{{ $p->discountPercent() }}%</span>
                     @endif
+                    @if($p->product_status === 'sold')
+                    <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-gray-600 text-white text-xs font-semibold">Terjual</span>
+                    @endif
                 </div>
                 <div class="p-4">
                     <h3 class="font-semibold text-gray-800 text-sm mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">{{ $p->name }}</h3>

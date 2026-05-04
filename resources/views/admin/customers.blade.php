@@ -20,7 +20,7 @@
                     <td>{{ $c->phone ?? '-' }}</td>
                     <td>{{ $c->orders_count }}</td>
                     <td class="text-gray-500">{{ $c->created_at->format('d M Y') }}</td>
-                    <td><span class="badge {{ $c->is_active ? 'badge-success' : 'badge-danger' }}">{{ $c->is_active ? 'Aktif' : 'Tidak Aktif' }}</span></td>
+                    <td><span class="badge {{ $c->is_customer ? 'badge-success' : 'badge-danger' }}">{{ $c->is_customer ? 'Aktif' : 'Tidak Aktif' }}</span></td>
                     <td onclick="event.stopPropagation()">
                         <div class="flex items-center gap-1">
                             <button onclick="showCustomer({{ $c->id }})" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-primary-600" title="Lihat"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
@@ -65,7 +65,7 @@ function showCustomer(id) {
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-14 h-14 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-xl">${d.name.charAt(0)}</div>
                     <div><h4 class="font-bold text-gray-900 text-lg">${d.name}</h4><p class="text-sm text-gray-500">${d.email}</p></div>
-                    <span class="ml-auto badge ${d.is_active ? 'badge-success' : 'badge-danger'}">${d.is_active ? 'Aktif' : 'Tidak Aktif'}</span>
+                    <span class="ml-auto badge ${d.is_customer ? 'badge-success' : 'badge-danger'}">${d.is_customer ? 'Aktif' : 'Tidak Aktif'}</span>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
                     <div class="bg-gray-50 rounded-xl p-3 text-center"><p class="text-xl font-bold text-gray-900">${d.orders_count}</p><p class="text-xs text-gray-400">Pesanan</p></div>

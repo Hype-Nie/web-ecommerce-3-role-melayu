@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +17,15 @@ class CheckoutController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $product = \App\Models\Product::with('seller')->findOrFail($request->product_id);
+        $product = Product::with('seller')->findOrFail($request->product_id);
+        if (! $product->is_active || $product->product_status === 'sold') {
+            return redirect()->route('produk.show', $product->slug)
+                ->with('error', 'Produk ini telah terjual atau tidak aktif.');
+        }
+        if ($product->quantity < $request->quantity) {
+            return redirect()->route('produk.show', $product->slug)
+                ->with('error', 'Kuantiti yang diminta melebihi stok tersedia.');
+        }
         $quantity = $request->quantity;
         $subtotal = $product->price * $quantity;
         $user = auth()->user();
@@ -36,7 +45,15 @@ class CheckoutController extends Controller
         ]);
 
         $user = auth()->user();
-        $product = \App\Models\Product::with('seller')->findOrFail($request->product_id);
+        $product = Product::with('seller')->findOrFail($request->product_id);
+        if (! $product->is_active || $product->product_status === 'sold') {
+            return redirect()->route('produk.show', $product->slug)
+                ->with('error', 'Produk ini telah terjual atau tidak aktif.');
+        }
+        if ($product->quantity < $request->quantity) {
+            return redirect()->route('produk.show', $product->slug)
+                ->with('error', 'Kuantiti yang diminta melebihi stok tersedia.');
+        }
         $quantity = $request->quantity;
         $subtotal = $product->price * $quantity;
         $total = $subtotal;
@@ -76,8 +93,8 @@ class CheckoutController extends Controller
             $message .= "*Alamat:* {$address->recipient_name}, {$address->phone}, {$address->address_line}, {$address->city}, {$address->state} {$address->postcode}\n";
         }
         $message .= "\n[*Item Pesanan*]\n";
-        $message .= "- {$product->name} x{$quantity} : RM " . number_format($subtotal, 2) . "\n";
-        $message .= "\n*Jumlah:* RM " . number_format($total, 2) . "\n";
+        $message .= "- {$product->name} x{$quantity} : RM ".number_format($subtotal, 2)."\n";
+        $message .= "\n*Jumlah:* RM ".number_format($total, 2)."\n";
         $message .= "*Kaedah Bayaran:* {$order->payment_method}\n";
         $message .= "\nTerima kasih kerana menggunakan CampusBuy!";
 
@@ -86,10 +103,10 @@ class CheckoutController extends Controller
         // Normalize phone number for WhatsApp
         $sellerPhone = preg_replace('/[^0-9]/', '', $sellerPhone);
         if (str_starts_with($sellerPhone, '0')) {
-            $sellerPhone = '60' . substr($sellerPhone, 1);
+            $sellerPhone = '62'.substr($sellerPhone, 1);
         }
 
-        $waUrl = 'https://wa.me/' . $sellerPhone . '?text=' . urlencode($message);
+        $waUrl = 'https://wa.me/'.$sellerPhone.'?text='.urlencode($message);
 
         return redirect()->away($waUrl);
     }

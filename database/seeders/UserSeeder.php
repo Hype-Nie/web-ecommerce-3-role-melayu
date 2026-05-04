@@ -19,6 +19,8 @@ class UserSeeder extends Seeder
             'role'      => 'admin',
             'phone'     => '03-12345678',
             'is_active' => true,
+            'is_seller' => false,
+            'is_customer' => false,
         ]);
 
         // Sellers
@@ -31,6 +33,8 @@ class UserSeeder extends Seeder
             'phone'     => '012-3456789',
             'shop_name' => 'Kedai Aminah',
             'is_active' => true,
+            'is_seller' => true,
+            'is_customer' => true,
         ]);
 
         User::create([
@@ -42,6 +46,8 @@ class UserSeeder extends Seeder
             'phone'     => '013-9876543',
             'shop_name' => 'Tech Store MY',
             'is_active' => true,
+            'is_seller' => true,
+            'is_customer' => true,
         ]);
 
         // Customers
@@ -53,6 +59,8 @@ class UserSeeder extends Seeder
             'role'      => 'customer',
             'phone'     => '012-3456789',
             'is_active' => true,
+            'is_seller' => false,
+            'is_customer' => true,
         ]);
 
         User::create([
@@ -63,6 +71,8 @@ class UserSeeder extends Seeder
             'role'      => 'customer',
             'phone'     => '013-9876543',
             'is_active' => true,
+            'is_seller' => false,
+            'is_customer' => true,
         ]);
 
         User::create([
@@ -73,6 +83,8 @@ class UserSeeder extends Seeder
             'role'      => 'customer',
             'phone'     => '011-1234567',
             'is_active' => true,
+            'is_seller' => false,
+            'is_customer' => true,
         ]);
     }
 }

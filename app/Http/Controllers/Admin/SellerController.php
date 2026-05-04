@@ -5,27 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SellerController extends Controller
 {
     public function index()
     {
-        $sellers = User::where('role', 'seller')->withCount('products')->latest()->get();
+        $sellers = User::where('is_seller', true)->withCount('products')->latest()->get();
         return view('admin.sellers', compact('sellers'));
     }
 
     public function store(Request $request)
     {
+        $existingUser = User::where('email', $request->email)
+            ->orWhere('campus_id', $request->campus_id)
+            ->first();
+
         $request->validate([
             'name'      => 'required|string|max:255',
-            'campus_id' => 'required|string|max:50|unique:users',
-            'email'     => 'required|email|unique:users',
+            'campus_id' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('users', 'campus_id')->ignore($existingUser?->id),
+            ],
+            'email'     => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($existingUser?->id),
+            ],
             'phone'     => 'required|string|max:20',
             'shop_name' => 'required|string|max:255',
             'password'  => 'required|string|min:6',
         ]);
 
-        User::create([
+        $data = [
             'name'      => $request->name,
             'campus_id' => $request->campus_id,
             'email'     => $request->email,
@@ -33,14 +47,23 @@ class SellerController extends Controller
             'shop_name' => $request->shop_name,
             'password'  => $request->password,
             'role'      => 'seller',
-        ]);
+            'is_seller' => true,
+            'is_customer' => true,
+            'is_active' => true,
+        ];
+
+        if ($existingUser) {
+            $existingUser->update($data);
+        } else {
+            User::create($data);
+        }
 
         return redirect()->route('admin.sellers')->with('success', 'Penjual berjaya ditambah.');
     }
 
     public function show(User $user)
     {
-        if ($user->role !== 'seller') abort(404);
+        if (!$user->isSeller()) abort(404);
 
         $totalSales = $user->products()
             ->withSum('orderItems', 'subtotal')
@@ -62,7 +85,7 @@ class SellerController extends Controller
 
     public function update(Request $request, User $user)
     {
-        if ($user->role !== 'seller') abort(404);
+        if (!$user->isSeller()) abort(404);
 
         $request->validate([
             'name'     => 'required|string|max:255',

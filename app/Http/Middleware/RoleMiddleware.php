@@ -14,7 +14,23 @@ class RoleMiddleware
             return redirect()->route('login');
         }
 
-        if (!in_array(auth()->user()->role, $roles)) {
+        $user = auth()->user();
+        $hasRole = false;
+
+        foreach ($roles as $role) {
+            $hasRole = match ($role) {
+                'admin' => $user->isAdmin(),
+                'seller' => $user->isSeller(),
+                'customer' => $user->isCustomer(),
+                default => false,
+            };
+
+            if ($hasRole) {
+                break;
+            }
+        }
+
+        if (!$hasRole) {
             abort(403, 'Anda tidak mempunyai akses ke halaman ini.');
         }
 
