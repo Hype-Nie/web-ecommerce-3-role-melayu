@@ -19,9 +19,13 @@
         </div>
         @foreach($o->items->take(2) as $item)
         <div class="flex items-center gap-4 {{ !$loop->first ? 'mt-3' : '' }}">
+            @if($item->product && $item->product->images->isNotEmpty())
+            <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+            @else
             <div class="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
                 <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
             </div>
+            @endif
             <div class="flex-1">
                 <p class="font-semibold text-gray-800">{{ $item->product_name }}</p>
                 <p class="text-sm text-gray-500">x{{ $item->quantity }} · RM {{ number_format($item->product_price, 2) }}</p>

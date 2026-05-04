@@ -17,6 +17,10 @@ class CheckoutController extends Controller
         ]);
 
         $product = \App\Models\Product::with('seller')->findOrFail($request->product_id);
+        if (!$product->is_active || $product->product_status === 'sold') {
+            return redirect()->route('produk.show', $product->slug)
+                ->with('error', 'Produk ini telah terjual atau tidak aktif.');
+        }
         $quantity = $request->quantity;
         $subtotal = $product->price * $quantity;
         $user = auth()->user();
@@ -37,6 +41,10 @@ class CheckoutController extends Controller
 
         $user = auth()->user();
         $product = \App\Models\Product::with('seller')->findOrFail($request->product_id);
+        if (!$product->is_active || $product->product_status === 'sold') {
+            return redirect()->route('produk.show', $product->slug)
+                ->with('error', 'Produk ini telah terjual atau tidak aktif.');
+        }
         $quantity = $request->quantity;
         $subtotal = $product->price * $quantity;
         $total = $subtotal;
@@ -86,7 +94,7 @@ class CheckoutController extends Controller
         // Normalize phone number for WhatsApp
         $sellerPhone = preg_replace('/[^0-9]/', '', $sellerPhone);
         if (str_starts_with($sellerPhone, '0')) {
-            $sellerPhone = '60' . substr($sellerPhone, 1);
+            $sellerPhone = '62' . substr($sellerPhone, 1);
         }
 
         $waUrl = 'https://wa.me/' . $sellerPhone . '?text=' . urlencode($message);

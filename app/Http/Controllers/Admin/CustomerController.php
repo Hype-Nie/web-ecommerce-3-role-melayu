@@ -9,13 +9,13 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = User::where('role', 'customer')->withCount('orders')->latest()->get();
+        $customers = User::where('is_customer', true)->withCount('orders')->latest()->get();
         return view('admin.customers', compact('customers'));
     }
 
     public function show(User $user)
     {
-        if ($user->role !== 'customer') abort(404);
+        if (!$user->isCustomer()) abort(404);
 
         $user->loadCount('orders', 'addresses');
         $totalSpending = $user->orders()->where('payment_status', 'paid')->sum('total');
@@ -26,7 +26,7 @@ class CustomerController extends Controller
             'name'            => $user->name,
             'email'           => $user->email,
             'phone'           => $user->phone,
-            'is_active'       => $user->is_active,
+            'is_customer'     => $user->is_customer,
             'orders_count'    => $user->orders_count,
             'addresses_count' => $user->addresses_count,
             'total_spending'  => number_format($totalSpending, 2),

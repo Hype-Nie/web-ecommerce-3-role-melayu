@@ -84,6 +84,7 @@
                             </div>
                         </label>
                     </div>
+                    <p class="text-xs text-gray-500 mt-2">Jika sudah ada akaun pelanggan, gunakan e-mel/Campus ID sama dan kata laluan untuk mohon jadi penjual.</p>
                 </div>
 
                 {{-- Shop Name (Seller Only) --}}
