@@ -12,8 +12,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $totalSellers   = User::where('role', 'seller')->count();
-        $totalCustomers = User::where('role', 'customer')->count();
+        $totalSellers   = User::where('is_seller', true)->count();
+        $totalCustomers = User::where('is_customer', true)->count();
         $totalProducts  = Product::count();
         $totalRevenue   = Order::where('payment_status', 'paid')->sum('total');
         $recentOrders   = Order::with('user')->latest()->take(5)->get();
