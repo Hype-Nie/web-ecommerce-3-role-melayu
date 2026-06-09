@@ -27,9 +27,7 @@
                 </div>
                 <div class="flex items-center gap-1" onclick="event.stopPropagation()">
                     <button onclick="editCategory({{ $c->id }})" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-primary-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-                    <form action="{{ route('admin.categories.destroy', $c) }}" method="POST" onsubmit="return confirm('Padam?')">@csrf @method('DELETE')
-                        <button class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-danger-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-                    </form>
+                    <button type="button" onclick="confirmDeleteCategory('{{ route('admin.categories.destroy', $c) }}')" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-danger-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                 </div>
             </div>
             <h3 class="font-bold text-gray-900 mb-1">{{ $c->name }}</h3>
@@ -101,6 +99,34 @@
         </form>
     </div>
 </div>
+
+{{-- Delete Category Modal --}}
+<div id="modal-delete-cat" class="modal-overlay">
+    <div class="modal-content max-w-md overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-danger-50 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Sahkan Pemadaman</h3>
+                    <p class="text-xs text-danger-600 font-medium mt-0.5">Tindakan ini tidak boleh diundur</p>
+                </div>
+            </div>
+            <button data-modal-close class="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 text-base leading-relaxed">Memadam kategori ini akan mengakibatkan <span class="font-semibold text-gray-900">semua produk di dalam kategori ini turut terpadam</span>. Adakah anda pasti ingin meneruskan pemadaman ini?</p>
+        </div>
+        <div class="p-6 border-t border-gray-100 flex justify-end gap-3">
+            <button type="button" data-modal-close class="btn-ghost text-sm !px-5 !py-2.5">Batal</button>
+            <form id="delete-cat-form" method="POST">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn-danger text-sm !px-6 !py-2.5">Ya, Padam Kategori</button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -137,6 +163,13 @@ function editCategory(id) {
             const modal = document.getElementById('modal-edit-cat');
             modal.classList.add('active'); document.body.classList.add('overflow-hidden');
         });
+}
+
+function confirmDeleteCategory(url) {
+    document.getElementById('delete-cat-form').action = url;
+    const modal = document.getElementById('modal-delete-cat');
+    modal.classList.add('active'); 
+    document.body.classList.add('overflow-hidden');
 }
 </script>
 @endsection
