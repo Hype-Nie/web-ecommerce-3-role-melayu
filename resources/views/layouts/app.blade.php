@@ -8,18 +8,20 @@
     <title>@yield('title', 'CampusBuy') — Marketplace Kampus</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+<body class="bg-white text-black font-sans antialiased tracking-tight">
 
-    {{-- ══════════ NAVBAR ══════════ --}}
+    {{-- ══════════ NAVBAR (Vertical Nav Rail & Mobile Topbar) ══════════ --}}
     @include('components.navbar')
 
     {{-- ══════════ MAIN CONTENT ══════════ --}}
-    <main>
-        @yield('content')
-    </main>
+    <div class="lg:pl-[72px] flex flex-col min-h-screen">
+        <main class="flex-1 w-full pb-20">
+            @yield('content')
+        </main>
 
-    {{-- ══════════ FOOTER ══════════ --}}
-    @include('components.footer')
+        {{-- ══════════ FOOTER ══════════ --}}
+        @include('components.footer')
+    </div>
 
     {{-- Toast Notification Container --}}
     <div id="toast-container" class="fixed top-24 right-6 z-[100] space-y-3"></div>

@@ -24,9 +24,7 @@
                     <td onclick="event.stopPropagation()">
                         <div class="flex items-center gap-1">
                             <button onclick="showCustomer({{ $c->id }})" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-primary-600" title="Lihat"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
-                            <form action="{{ route('admin.customers.destroy', $c) }}" method="POST" onsubmit="return confirm('Padam pelanggan ini?')">@csrf @method('DELETE')
-                                <button class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-danger-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-                            </form>
+                            <button type="button" onclick="confirmDeleteCustomer({{ $c->id }})" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-danger-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                         </div>
                     </td>
                 </tr>
@@ -46,6 +44,29 @@
             <button data-modal-close class="p-2 rounded-lg hover:bg-gray-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
         </div>
         <div class="p-6 max-h-[60vh] overflow-y-auto" id="cust-detail-body"><p class="text-center text-gray-400">Memuatkan...</p></div>
+    </div>
+</div>
+
+{{-- Delete Confirmation Modal --}}
+<div id="modal-delete-customer" class="modal-overlay">
+    <div class="modal-content max-w-md">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-danger-50 flex items-center justify-center text-danger-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                <h3 class="text-lg font-bold text-gray-900">Padam Pelanggan</h3>
+            </div>
+            <button data-modal-close class="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 text-base leading-relaxed">Memadam pelanggan ini akan mengakibatkan <span class="font-semibold text-gray-900">semua sejarah pesanan dan alamat mereka turut terpadam secara kekal</span>. Adakah anda pasti ingin meneruskan?</p>
+        </div>
+        <div class="p-6 border-t border-gray-100 flex justify-end gap-3">
+            <button type="button" data-modal-close class="btn-ghost text-sm !px-5 !py-2.5">Batal</button>
+            <form id="delete-customer-form" method="POST">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn-danger text-sm !px-6 !py-2.5">Ya, Padam</button>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
@@ -82,6 +103,14 @@ function showCustomer(id) {
                 </div>
             `;
         });
+}
+
+function confirmDeleteCustomer(id) {
+    event.stopPropagation();
+    document.getElementById('delete-customer-form').action = `/admin/pelanggan/${id}`;
+    const modal = document.getElementById('modal-delete-customer');
+    modal.classList.add('active'); 
+    document.body.classList.add('overflow-hidden');
 }
 </script>
 @endsection
