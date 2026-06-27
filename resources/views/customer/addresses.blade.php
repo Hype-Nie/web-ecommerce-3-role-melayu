@@ -27,7 +27,7 @@
             @if(!$a->is_default)
             <form action="{{ route('customer.addresses.default', $a) }}" method="POST">@csrf @method('PATCH')<button class="text-sm text-primary-600 font-semibold hover:text-primary-700">Tetapkan Utama</button></form>
             <span class="text-gray-300">·</span>
-            <form action="{{ route('customer.addresses.destroy', $a) }}" method="POST" onsubmit="return confirm('Padam?')">@csrf @method('DELETE')<button class="text-sm text-danger-600 font-semibold hover:text-danger-700">Padam</button></form>
+            <button type="button" onclick="confirmDeleteAddress({{ $a->id }})" class="text-sm text-danger-600 font-semibold hover:text-danger-700">Padam</button>
             @else
             <span class="text-sm text-gray-400">Alamat utama</span>
             @endif
@@ -104,6 +104,29 @@
         </form>
     </div>
 </div>
+
+{{-- Delete Confirmation Modal --}}
+<div id="modal-delete-addr" class="modal-overlay">
+    <div class="modal-content max-w-md">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-danger-50 flex items-center justify-center text-danger-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                <h3 class="text-lg font-bold text-gray-900">Padam Alamat</h3>
+            </div>
+            <button data-modal-close class="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 text-base leading-relaxed">Adakah anda pasti ingin memadam alamat ini? Tindakan ini tidak boleh dipulihkan.</p>
+        </div>
+        <div class="p-6 border-t border-gray-100 flex justify-end gap-3">
+            <button type="button" data-modal-close class="btn-ghost text-sm !px-5 !py-2.5">Batal</button>
+            <form id="delete-addr-form" method="POST">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn-danger text-sm !px-6 !py-2.5">Ya, Padam</button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -146,7 +169,17 @@ function editAddress(id) {
             const modal = document.getElementById('modal-edit-addr');
             modal.classList.add('active');
             document.body.classList.add('overflow-hidden');
+            modal.classList.add('active');
+            document.body.classList.add('overflow-hidden');
         });
+}
+
+function confirmDeleteAddress(id) {
+    event.stopPropagation();
+    document.getElementById('delete-addr-form').action = `/pelanggan/alamat/${id}`;
+    const modal = document.getElementById('modal-delete-addr');
+    modal.classList.add('active'); 
+    document.body.classList.add('overflow-hidden');
 }
 </script>
 @endsection

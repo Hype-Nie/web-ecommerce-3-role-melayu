@@ -1,152 +1,291 @@
 @extends('layouts.app')
 @section('title', 'Laman Utama')
-@section('meta_description', 'CampusBuy — Marketplace eksklusif kampus anda. Jual-beli dalam kampus dengan mudah dan selamat.')
 
 @section('content')
+
+{{-- TOP PROMO BAR --}}
+<a href="{{ route('produk.index') }}" class="w-full bg-[#121212] py-2.5 px-4 flex justify-center items-center gap-3 hover:bg-black transition-colors group">
+    <div class="w-5 h-5 bg-primary-600 rounded-[4px] flex items-center justify-center text-white">
+        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+    </div>
+    <span class="text-white text-[12px] font-medium tracking-tight">Cara pantas beli & terus WhatsApp. Lihat Semua Produk</span>
+    <svg class="w-3 h-3 text-white transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+</a>
+
 {{-- HERO --}}
-<section class="relative gradient-hero text-white overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-20 left-10 w-72 h-72 bg-primary-400 rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-10 right-10 w-96 h-96 bg-primary-300 rounded-full blur-3xl animate-float delay-300"></div>
+<section class="relative min-h-[450px] md:min-h-[550px] lg:min-h-[600px] pt-24 pb-16 flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+    {{-- Decorative background gradients --}}
+    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary-100 blur-3xl mix-blend-multiply"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-100 blur-3xl mix-blend-multiply"></div>
     </div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <div class="animate-fade-in-up">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-primary-200 text-sm font-medium mb-6 backdrop-blur-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    Marketplace Eksklusif Kampus
-                </span>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-                    Jual Beli <br><span class="text-primary-300">Di Kampus</span>
-                </h1>
-                <p class="text-lg text-primary-100/80 mb-8 max-w-lg">Temui pelbagai produk dari pelajar dan penjual di kampus anda. Transaksi mudah melalui WhatsApp.</p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#produk-popular" class="btn-primary !bg-white !text-primary-700 hover:!bg-primary-50">Mula Membeli</a>
-                    <a href="{{ route('register') }}" class="btn-primary !border-white/20 !text-white hover:!">Daftar Sekarang</a>
-                </div>
-                <div class="flex items-center gap-8 mt-10 text-sm">
-                    <div><span class="text-2xl font-bold text-white">10K+</span><p class="text-primary-200/70">Produk</p></div>
-                    <div class="w-px h-10 bg-white/10"></div>
-                    <div><span class="text-2xl font-bold text-white">5K+</span><p class="text-primary-200/70">Pelajar</p></div>
-                    <div class="w-px h-10 bg-white/10"></div>
-                    <div><span class="text-2xl font-bold text-white">500+</span><p class="text-primary-200/70">Penjual</p></div>
-                </div>
+
+    {{-- Decorative floating images (Massive & Clear) --}}
+    <div class="absolute inset-0 pointer-events-none hidden md:block">
+        @foreach($products->take(4) as $index => $p)
+            @if($p->images->isNotEmpty())
+            <div class="absolute {{ ['top-[8%] left-[4%]', 'top-[12%] right-[4%]', 'bottom-[8%] left-[12%]', 'bottom-[12%] right-[12%]' ][$index] }} transform {{ ['-rotate-12', 'rotate-6', 'rotate-12', '-rotate-6'][$index] }} z-0">
+                <img src="{{ asset('storage/' . $p->images->first()->image_path) }}" class="w-[160px] h-[160px] lg:w-[240px] lg:h-[240px] object-cover rounded-[24px] shadow-2xl drop-shadow-2xl hover:scale-105 transition-transform duration-500">
             </div>
-            <div class="hidden lg:flex justify-center animate-fade-in delay-300">
-                <div class="relative">
-                    <div class="w-80 h-80 rounded-3xl gradient-primary opacity-20 blur-2xl absolute top-8 left-8"></div>
-                    <div class="relative w-80 h-80 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center">
-                        <svg class="w-32 h-32 text-primary-300/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/></svg>
-                    </div>
-                </div>
-            </div>
-        </div>
+            @endif
+        @endforeach
     </div>
-    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent"></div>
+
+    <div class="relative z-10 flex flex-col items-center w-full max-w-[600px]">
+        <h1 class="text-[56px] md:text-[72px] font-bold tracking-tighter text-primary-600 mb-8 leading-none">
+            campus<span class="text-primary-600">buy</span>
+        </h1>
+        
+        {{-- HERO SEARCH --}}
+        {{-- HERO SEARCH --}}
+        <form id="hero-search" action="{{ route('produk.index') }}" method="GET" class="relative w-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] rounded-[28px] hover:scale-[1.02] transition-transform duration-300">
+            <input type="text" name="search" placeholder="Apa yang anda cari hari ini?" class="w-full h-[56px] pl-[24px] pr-[56px] rounded-[28px] border border-gray-100 bg-white text-[14px] text-black placeholder-gray-400 outline-none focus:border-primary-600 transition-colors">
+            <button type="submit" class="absolute right-[6px] top-[6px] w-[44px] h-[44px] bg-primary-600 rounded-full flex items-center justify-center text-white shadow-[0_4px_20px_rgba(225,29,72,0.4)] hover:bg-primary-700 active:scale-95 transition-all duration-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+        </form>
+    </div>
 </section>
 
-{{-- KATEGORI --}}
-<section class="py-16 lg:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12 reveal">
-        <h2 class="text-3xl font-bold text-gray-900 mb-3">Kategori Pilihan</h2>
-        <p class="text-gray-500 max-w-md mx-auto">Terokai pelbagai kategori produk di kampus anda</p>
+{{-- FEATURES TICKER --}}
+<div class="flex items-center justify-center gap-8 md:gap-16 flex-wrap opacity-50 pb-16 pt-4 border-b border-gray-100 max-w-[1000px] mx-auto w-full">
+    <div class="flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        <span class="font-bold text-[14px]">Terus WhatsApp</span>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6">
+    <div class="flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        <span class="font-bold text-[14px]">Eksklusif Kampus</span>
+    </div>
+    <div class="flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <span class="font-bold text-[14px]">Selamat & Pantas</span>
+    </div>
+</div>
+
+{{-- CATEGORY PILLS --}}
+<section class="max-w-[1000px] mx-auto px-4 pb-16">
+    <div class="flex flex-wrap justify-center gap-[12px]">
         @php
-        $catColors = ['from-blue-500 to-blue-600','from-pink-500 to-rose-500','from-amber-500 to-orange-500','from-primary-500 to-primary-600','from-red-500 to-red-600','from-violet-500 to-purple-600','from-teal-500 to-teal-600'];
-        $catIcons = ['M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z','M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z','M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4','M13 10V3L4 14h7v7l9-11h-7z','M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z','M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z','M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'];
+        $catColors = ['bg-blue-600', 'bg-rose-600', 'bg-amber-500', 'bg-green-600', 'bg-purple-600', 'bg-teal-600'];
         @endphp
         @foreach($categories as $i => $cat)
-        <a href="{{ route('produk.index', ['category' => $cat->id]) }}" class="group reveal">
-            <div class="bg-white rounded-2xl p-6 text-center card-hover border border-gray-100">
-                @if($cat->image)
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl overflow-hidden group-hover:scale-110 transition-transform duration-300">
-                    <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" class="w-full h-full object-cover">
+        <a href="{{ route('produk.index', ['category' => $cat->id]) }}" class="flex items-center gap-[8px] pl-[6px] pr-[16px] py-[6px] bg-white border border-gray-200 rounded-[28px] hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all duration-300">
+            @if($cat->image)
+            <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" class="w-[28px] h-[28px] object-cover rounded-full bg-gray-100">
+            @else
+            <div class="w-[28px] h-[28px] rounded-full {{ $catColors[$i % count($catColors)] }} flex items-center justify-center text-white">
+                <span class="text-[10px] font-bold">{{ substr($cat->name, 0, 1) }}</span>
+            </div>
+            @endif
+            <span class="text-[13px] font-medium tracking-tight text-black">{{ $cat->name }}</span>
+        </a>
+        @endforeach
+    </div>
+</section>
+
+{{-- CATEGORY BOXES (Single Horizontal Scroll, No Wrapper Card) --}}
+<section class="w-full pl-4 sm:pl-6 lg:pl-12 pb-16 overflow-hidden">
+    <div class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 pr-4 lg:pr-12" style="scrollbar-width: none;">
+        @foreach($categories as $cat)
+            @php
+                $catProducts = \App\Models\Product::where('category_id', $cat->id)->where('product_status', 'available')->latest()->take(4)->get();
+            @endphp
+            @if($catProducts->count() > 0)
+            <div class="w-[280px] md:w-[320px] flex-shrink-0 snap-start flex flex-col group">
+                
+                {{-- Category Title ONLY --}}
+                <a href="{{ route('produk.index', ['category' => $cat->id]) }}" class="flex items-center gap-2 mb-3 px-1 w-fit">
+                    <h3 class="text-[20px] md:text-[24px] font-bold text-black tracking-tight group-hover:text-primary-600 transition-colors">{{ $cat->name }}</h3>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-primary-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+                
+                {{-- 2x2 Grid Container with Fixed Dimensions and Rounded Outer Corners --}}
+                <div class="grid grid-cols-2 grid-rows-2 gap-[2px] w-[280px] h-[280px] md:w-[320px] md:h-[320px] rounded-[32px] overflow-hidden bg-white shadow-sm border border-gray-100">
+                    @foreach($catProducts as $p)
+                        <a href="{{ route('produk.show', $p->slug) }}" class="w-full h-full relative overflow-hidden bg-[#f4f4f4] group/item hover:opacity-95 transition-opacity">
+                            @if($p->images->isNotEmpty())
+                            <img src="{{ asset('storage/' . $p->images->first()->image_path) }}" class="absolute inset-0 w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500">
+                            @else
+                            {{-- Shopping Bag Icon Placeholder --}}
+                            <div class="absolute inset-0 flex items-center justify-center bg-[#f4f4f4]">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                            </div>
+                            @endif
+                            
+                            {{-- Product Name Overlay --}}
+                            <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none">
+                                <p class="text-white text-[13px] font-medium leading-tight drop-shadow-md line-clamp-1">{{ $p->name }}</p>
+                            </div>
+                        </a>
+                    @endforeach
+                    
+                    {{-- Empty slots (Shopping Bag Icon Placeholder) --}}
+                    @for($i = $catProducts->count(); $i < 4; $i++)
+                        <a href="{{ route('produk.index', ['category' => $cat->id]) }}" class="w-full h-full bg-[#f9f9f9] flex flex-col items-center justify-center group/empty hover:bg-[#f0f0f0] transition-colors">
+                            <svg class="w-6 h-6 text-gray-300 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                            <span class="text-[10px] text-gray-400 font-medium">Lagi...</span>
+                        </a>
+                    @endfor
                 </div>
+            </div>
+            @endif
+        @endforeach
+    </div>
+</section>
+
+{{-- CURATED COLLECTIONS --}}
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="mb-8">
+        <h2 class="text-[20px] font-bold tracking-tight text-black">Koleksi Terpilih</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="{{ route('produk.index') }}" class="relative h-[240px] md:h-[280px] rounded-[32px] overflow-hidden group bg-gray-100 block">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-black/10"></div>
+            <div class="absolute inset-0 p-8 flex flex-col justify-center">
+                <span class="px-3 py-1 bg-primary-600 text-white text-[10px] font-bold tracking-wider rounded-full w-fit mb-4">BARU</span>
+                <h3 class="text-white text-[24px] md:text-[28px] font-bold leading-tight mb-2">Gajet & Aksesori<br>Pelajar IT</h3>
+                <p class="text-gray-300 text-[14px] max-w-[220px] mb-6">Tingkatkan produktiviti dengan gajet terpakai berkualiti.</p>
+                <div class="flex items-center gap-2 text-white font-medium text-[13px] group-hover:gap-3 transition-all">
+                    Lihat Koleksi <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
+            </div>
+        </a>
+        <a href="{{ route('produk.index') }}" class="relative h-[240px] md:h-[280px] rounded-[32px] overflow-hidden group bg-gray-100 block">
+            <img src="https://images.unsplash.com/photo-1434389678232-02621d154ee4?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-black/10"></div>
+            <div class="absolute inset-0 p-8 flex flex-col justify-center">
+                <span class="px-3 py-1 bg-white text-black text-[10px] font-bold tracking-wider rounded-full w-fit mb-4">TRENDING</span>
+                <h3 class="text-white text-[24px] md:text-[28px] font-bold leading-tight mb-2">Fesyen & Gaya<br>Khas Ke Kelas</h3>
+                <p class="text-gray-300 text-[14px] max-w-[220px] mb-6">Pakaian *preloved* berjenama pada harga pelajar.</p>
+                <div class="flex items-center gap-2 text-white font-medium text-[13px] group-hover:gap-3 transition-all">
+                    Lihat Koleksi <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+{{-- WHY CHOOSE US --}}
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="text-center mb-10">
+        <h2 class="text-[28px] md:text-[32px] font-bold tracking-tight text-black mb-4">Kenapa Beli di CampusBuy?</h2>
+        <p class="text-gray-500 text-[15px] max-w-lg mx-auto">Kami menyelesaikan masalah jual beli di antara rakan kampus. Tidak perlu lagi pos barang, COD terus di kolej kediaman!</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white border border-gray-100 rounded-[32px] p-8 text-center hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-shadow">
+            <div class="w-16 h-16 mx-auto bg-primary-50 rounded-[20px] flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <h3 class="text-[18px] font-bold text-black mb-3">Dekat & Pantas</h3>
+            <p class="text-gray-500 text-[14px]">Berurusan terus dengan rakan sekampus. COD hari ini juga tanpa perlu tunggu kurier.</p>
+        </div>
+        <div class="bg-white border border-gray-100 rounded-[32px] p-8 text-center hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-shadow">
+            <div class="w-16 h-16 mx-auto bg-primary-50 rounded-[20px] flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="text-[18px] font-bold text-black mb-3">Lebih Selamat</h3>
+            <p class="text-gray-500 text-[14px]">Platform eksklusif komuniti kampus. Profil penjual lebih telus untuk kepercayaan bersama.</p>
+        </div>
+        <div class="bg-white border border-gray-100 rounded-[32px] p-8 text-center hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-shadow">
+            <div class="w-16 h-16 mx-auto bg-primary-50 rounded-[20px] flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-[18px] font-bold text-black mb-3">Harga Pelajar</h3>
+            <p class="text-gray-500 text-[14px]">Temui barangan *preloved* dan buku teks terpakai dengan harga yang sangat berpatutan.</p>
+        </div>
+    </div>
+</section>
+
+@guest
+{{-- CTA AJAKAN LOGIN (To fill empty space) --}}
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-16">
+    <div class="w-full bg-primary-600 rounded-[32px] p-8 md:p-16 flex flex-col md:flex-row items-center justify-between text-white relative overflow-hidden shadow-[0_20px_40px_rgba(225,29,72,0.2)]">
+        <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-black/10 rounded-full blur-3xl"></div>
+        
+        <div class="relative z-10 max-w-lg mb-8 md:mb-0">
+            <h2 class="text-[32px] md:text-[40px] font-bold tracking-tight leading-tight mb-4">Sertai Komuniti CampusBuy</h2>
+            <p class="text-[16px] text-white/90 font-medium mb-8">Beli barangan, jual preloved anda, dan berhubung dengan rakan kampus lain dengan lebih mudah dan selamat.</p>
+            <div class="flex flex-wrap gap-4">
+                <a href="{{ route('register') }}" class="px-6 py-3 bg-white text-primary-600 font-bold rounded-[24px] hover:scale-105 active:scale-95 transition-transform shadow-lg">Daftar Sekarang</a>
+                <a href="{{ route('login') }}" class="px-6 py-3 bg-black/20 text-white font-bold rounded-[24px] hover:bg-black/30 transition-colors">Log Masuk</a>
+            </div>
+        </div>
+        
+        <div class="relative z-10 hidden md:block">
+            <svg class="w-48 h-48 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+        </div>
+    </div>
+</section>
+@endguest
+
+{{-- SEMUA PRODUK (Untuk mengisi paparan) --}}
+<section class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+    <div class="mb-8">
+        <h2 class="text-[20px] font-bold tracking-tight text-black">Lebih Banyak Produk</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        @foreach($products as $p)
+        <a href="{{ route('produk.show', $p->slug) }}" class="group block bg-white border border-gray-200 rounded-[16px] hover:border-gray-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+            <div class="w-full aspect-square bg-gray-100 flex items-center justify-center relative">
+                @if($p->images->isNotEmpty())
+                <img src="{{ asset('storage/' . $p->images->first()->image_path) }}" alt="{{ $p->name }}" class="w-full h-full object-cover">
                 @else
-                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br {{ $catColors[$i % count($catColors)] }} flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $catIcons[$i % count($catIcons)] }}"/></svg>
-                </div>
+                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 @endif
-                <h3 class="font-semibold text-gray-800 text-sm">{{ $cat->name }}</h3>
-                <p class="text-xs text-gray-400 mt-1">{{ $cat->products_count }} produk</p>
+                @if($p->discountPercent())
+                <span class="absolute top-2 left-2 px-2 py-0.5 rounded-[28px] bg-white border border-gray-200 text-black text-[10px] font-bold shadow-sm">-{{ $p->discountPercent() }}%</span>
+                @endif
+            </div>
+            <div class="p-4">
+                <h3 class="text-[13px] font-medium text-black line-clamp-1 mb-1">{{ $p->name }}</h3>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-[14px] font-bold text-black">RM{{ number_format($p->price, 0) }}</span>
+                    @if($p->old_price)<span class="text-[11px] text-gray-400 line-through">RM{{ number_format($p->old_price, 0) }}</span>@endif
+                </div>
             </div>
         </a>
         @endforeach
     </div>
 </section>
 
-{{-- PRODUK POPULAR --}}
-<section id="produk-popular" class="py-16 lg:py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-12 reveal">
-            <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-3">Produk Popular</h2>
-                <p class="text-gray-500">Produk terlaris pilihan pelajar kampus</p>
-            </div>
-            <a href="{{ route('produk.index') }}" class="hidden sm:inline-flex items-center gap-1 text-primary-600 font-semibold hover:text-primary-700 transition-colors">
-                Lihat Semua <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </a>
-        </div>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            @php $bgColors = ['from-blue-100 to-blue-50','from-amber-100 to-amber-50','from-purple-100 to-purple-50','from-primary-100 to-primary-50','from-rose-100 to-rose-50','from-green-100 to-green-50','from-yellow-100 to-yellow-50','from-sky-100 to-sky-50']; @endphp
-            @foreach($products as $i => $p)
-            <a href="{{ route('produk.show', $p->slug) }}" class="group reveal">
-                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden card-hover">
-                    <div class="relative h-48 bg-gradient-to-br {{ $bgColors[$i % count($bgColors)] }} flex items-center justify-center overflow-hidden">
-                        @if($p->images->isNotEmpty())
-                        <img src="{{ asset('storage/' . $p->images->first()->image_path) }}" alt="{{ $p->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        @else
-                        <svg class="w-16 h-16 text-gray-300 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-                        @endif
-                        @if($p->discountPercent())
-                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-primary-600 text-white text-xs font-semibold">-{{ $p->discountPercent() }}%</span>
-                        @endif
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 text-sm mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">{{ $p->name }}</h3>
-                        <p class="text-xs text-gray-400 mb-2">{{ $p->seller->shop_name ?? $p->seller->name }}</p>
-                        <div class="flex items-center gap-2">
-                            <span class="text-lg font-bold text-primary-600">RM {{ number_format($p->price, 2) }}</span>
-                            @if($p->old_price)<span class="text-sm text-gray-400 line-through">RM {{ number_format($p->old_price, 2) }}</span>@endif
-                        </div>
-                    </div>
-                </div>
-            </a>
-            @endforeach
-        </div>
-    </div>
-</section>
+{{-- STICKY BOTTOM SEARCH --}}
+<div id="sticky-search" class="fixed bottom-6 left-0 w-full z-40 flex justify-center px-4 transition-all duration-500 translate-y-32 opacity-0 pointer-events-none">
+    <form action="{{ route('produk.index') }}" method="GET" class="relative w-full max-w-[500px] shadow-[0_12px_40px_rgba(0,0,0,0.12)] rounded-[32px] hover:scale-[1.02] transition-transform duration-300 pointer-events-auto bg-white/90 backdrop-blur-md border border-gray-200">
+        <input type="text" name="search" placeholder="Apa yang anda cari hari ini?" class="w-full h-[56px] pl-[24px] pr-[56px] rounded-[32px] bg-transparent text-[14px] font-medium text-black placeholder-gray-500 outline-none focus:border-primary-600 transition-colors">
+        <button type="submit" class="absolute right-[6px] top-[6px] w-[44px] h-[44px] bg-primary-600 rounded-full flex items-center justify-center text-white shadow-md hover:bg-primary-700 active:scale-95 transition-all duration-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+    </form>
+</div>
 
-{{-- PROMO BANNER --}}
-<section class="py-16 lg:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid md:grid-cols-2 gap-6 reveal">
-        <div class="relative rounded-3xl overflow-hidden gradient-primary p-8 lg:p-10 text-white">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-12 translate-x-12"></div>
-            <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-sm font-medium mb-4">Tawaran Istimewa</span>
-            <h3 class="text-2xl lg:text-3xl font-bold mb-3">Diskaun Untuk Pelajar</h3>
-            <p class="text-primary-100/80 mb-6">Tawaran eksklusif untuk warga kampus!</p>
-            <a href="{{ route('produk.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-700 font-semibold rounded-xl hover:bg-primary-50 transition-all duration-300">Lihat Produk</a>
-        </div>
-        <div class="relative rounded-3xl overflow-hidden bg-gray-900 p-8 lg:p-10 text-white">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-primary-600/10 rounded-full -translate-y-12 translate-x-12"></div>
-            <span class="inline-block px-3 py-1 rounded-full bg-primary-600/30 text-primary-300 text-sm font-medium mb-4">WhatsApp Order</span>
-            <h3 class="text-2xl lg:text-3xl font-bold mb-3">Transaksi Mudah</h3>
-            <p class="text-gray-400 mb-6">Pesan terus melalui WhatsApp. Cepat, mudah dan selamat.</p>
-            <a href="{{ route('produk.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all duration-300">Mula Sekarang</a>
-        </div>
-    </div>
-</section>
+@endsection
 
-{{-- CTA --}}
-<section class="py-20 lg:py-28">
-    <div class="max-w-4xl mx-auto px-4 text-center reveal">
-        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Sedia Untuk Mula?</h2>
-        <p class="text-gray-500 mb-8 max-w-lg mx-auto">Daftar sekarang dan nikmati pengalaman jual-beli eksklusif di kampus anda.</p>
-        <div class="flex flex-wrap justify-center gap-4">
-            <a href="{{ route('register') }}" class="btn-primary text-lg !px-8 !py-4">Daftar Percuma</a>
-            <a href="{{ route('login') }}" class="btn-secondary text-lg !px-8 !py-4">Log Masuk</a>
-        </div>
-    </div>
-</section>
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const heroSearch = document.getElementById('hero-search');
+    const stickySearch = document.getElementById('sticky-search');
+    
+    if (heroSearch && stickySearch) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    // Show sticky search
+                    stickySearch.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+                    stickySearch.classList.add('translate-y-0', 'opacity-100');
+                } else {
+                    // Hide sticky search
+                    stickySearch.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                    stickySearch.classList.remove('translate-y-0', 'opacity-100');
+                }
+            });
+        }, { threshold: 0, rootMargin: "-100px 0px 0px 0px" });
+        
+        observer.observe(heroSearch);
+    }
+});
+</script>
 @endsection
